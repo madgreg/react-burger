@@ -1,0 +1,32 @@
+.card {
+    position: relative;
+    width: 272px;
+    height: 208px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.card img {
+    width: 240px;
+    height: 120px;
+}
+
+.price {
+    height: 24px;
+    display: flex;
+    justify-content: center;
+}
+
+*::-webkit-scrollbar {
+    width: 8px;
+}
+
+*::-webkit-scrollbar-track {
+    background: #8585ad;
+}
+
+*::-webkit-scrollbar-thumb {
+    background-color: #2f2f37;
+    border-radius: 1px;
+}
