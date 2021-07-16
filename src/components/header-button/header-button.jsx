@@ -6,6 +6,7 @@ import styles from "./header-button.module.css";
 
 export default function HeaderButton({ iconName, iconType, inActive = 1, first = 0, children }) {
     let icon;
+    
     switch (iconName) {
         case "ProfileIcon":
             icon = <ProfileIcon type={iconType} />;
@@ -15,6 +16,8 @@ export default function HeaderButton({ iconName, iconType, inActive = 1, first =
             break;
         case "ListIcon":
             icon = <ListIcon type={iconType} />;
+            break;
+        default:
             break;
     }
     let cssClassesDefaultArray = ["pl-5 pr-5", styles.nav_button, first ? "" : "ml-2"];
