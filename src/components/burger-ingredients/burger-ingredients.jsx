@@ -4,6 +4,7 @@ import TabBar from "../tab-bar/tab-bar";
 import styles from "./burger-ingredients.module.css";
 import data from "../../utils/data.json";
 
+
 export default function BurgerIngredients() {
     return (
         <section className={[styles.main].join(" ")}>

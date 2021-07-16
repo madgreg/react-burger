@@ -6,7 +6,7 @@ import { DragIcon } from "@ya.praktikum/react-developer-burger-ui-components/dis
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components/dist/ui/icons/currency-icon";
 import { Button } from "@ya.praktikum/react-developer-burger-ui-components/dist/ui/button";
 
-export default function BurgerConstructor (){
+export default function BurgerConstructor() {
     let bloked = [];
     let unbloked = [];
     data.forEach((x) => {
@@ -24,15 +24,15 @@ export default function BurgerConstructor (){
             };
             bloked.push(
                 <div key={x._id} className={["pl-8", styles.element].join(" ")}>
-                    <ConstructorElement {...{ ...bOpt, ...opt }} />
+                    <ConstructorElement {...{ ...bOpt, ...opt, text: opt.text + " (верх)" }} />
                 </div>
             );
 
             bOpt.type = "bottom";
 
             bloked.push(
-                <div key={x._id+'_'} className={["pl-8", styles.element].join(" ")}>
-                    <ConstructorElement {...{ ...bOpt, ...opt }} />
+                <div key={x._id + "_"} className={["pl-8", styles.element].join(" ")}>
+                    <ConstructorElement {...{ ...bOpt, ...opt, text: opt.text + " (низ)" }} />
                 </div>
             );
         } else {
@@ -64,4 +64,4 @@ export default function BurgerConstructor (){
             </div>
         </section>
     );
-};
+}
