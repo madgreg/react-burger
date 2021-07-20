@@ -42,8 +42,7 @@ export default function BurgerConstructor({ data }) {
         if (!ingredient) {
             return "";
         }
-        let opt = {
-            key: ingredient._id,
+        let opt = {            
             text: ingredient.name,
             price: ingredient.price,
             thumbnail: ingredient.image,
@@ -52,12 +51,12 @@ export default function BurgerConstructor({ data }) {
         };        
         let typeStr = " (верх)";
         if (index > 0) {
-            opt.type = "bottom";
+            opt.type = "bottom";            
             typeStr = " (низ)";
         }
-
+                        
         return (
-            <div key={x._id + "_"} className={["pl-8", styles.element].join(" ")}>
+            <div key={ingredient._id+'_'+index} className={["pl-8", styles.element].join(" ")}>
                 <ConstructorElement {...{ ...opt, text: opt.text + typeStr }} />
             </div>
         );
@@ -67,15 +66,13 @@ export default function BurgerConstructor({ data }) {
         if (!ingredient) {
             return "";
         }
-        const opt = {
-            key: ingredient._id,
+        const opt = {            
             text: ingredient.name,
             price: ingredient.price,
             thumbnail: ingredient.image,
-        };
-
+        };        
         return (
-            <div key={x._id} className={["pt-4", styles.element].join(" ")}>
+            <div key={ingredient._id+'_'+index} className={["pt-4", styles.element].join(" ")}>
                 <DragIcon type="primary" />
                 <span className="pl-2">
                     <ConstructorElement {...opt} />

@@ -36,5 +36,5 @@ HeaderButton.propTypes = {
     iconType: PropTypes.string.isRequired,
     inActive: PropTypes.number,
     first: PropTypes.number,
-    children: PropTypes.element,
+    children: PropTypes.string.isRequired,
 };
