@@ -3,10 +3,11 @@ import { ListIcon } from "@ya.praktikum/react-developer-burger-ui-components/dis
 import { ProfileIcon } from "@ya.praktikum/react-developer-burger-ui-components/dist/ui/icons/profile-icon";
 import React from "react";
 import styles from "./header-button.module.css";
+import PropTypes from "prop-types";
 
 export default function HeaderButton({ iconName, iconType, inActive = 1, first = 0, children }) {
     let icon;
-    
+
     switch (iconName) {
         case "ProfileIcon":
             icon = <ProfileIcon type={iconType} />;
@@ -29,3 +30,11 @@ export default function HeaderButton({ iconName, iconType, inActive = 1, first =
         </button>
     );
 }
+
+HeaderButton.propTypes = {
+    iconName: PropTypes.string.isRequired,
+    iconType: PropTypes.string.isRequired,
+    inActive: PropTypes.number,
+    first: PropTypes.number,
+    children: PropTypes.string.isRequired,
+};
