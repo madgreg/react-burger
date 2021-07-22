@@ -9,8 +9,7 @@ const modalRoot = document.getElementById("modal-root");
 
 export default function Modal({ children, onClose, title }) {
     React.useEffect(() => {
-        const keyDown = (e) => {
-            console.log(e.code);
+        const keyDown = (e) => {            
             if (e.code === "Escape") {
                 onClose();
             }

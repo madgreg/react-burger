@@ -4,8 +4,10 @@ import styles from "./burger-constructor.module.css";
 import { DragIcon } from "@ya.praktikum/react-developer-burger-ui-components/dist/ui/icons/drag-icon";
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components/dist/ui/icons/currency-icon";
 import { Button } from "@ya.praktikum/react-developer-burger-ui-components/dist/ui/button";
-import OrderDetails from '../order-details/order-details';
+import OrderDetails from "../order-details/order-details";
 import PropTypes from "prop-types";
+import { ingrediensPropTypes } from "../../types";
+import Modal from '../modal/modal';
 
 const order = {
     bun: ["60d3b41abdacab0026a733c6", "60d3b41abdacab0026a733c6"],
@@ -31,32 +33,32 @@ const getConstructorIngredient = (data, _id) => {
 
 export default function BurgerConstructor({ data }) {
     const [sendOrder, setSendOrder] = React.useState(false);
-    const sendOrderHandler=()=>{
-        setSendOrder(true)
-    }
-    const unSendOrderHandler=()=>{
-        setSendOrder(false)
-    }
+    const sendOrderHandler = () => {
+        setSendOrder(true);
+    };
+    const unSendOrderHandler = () => {
+        setSendOrder(false);
+    };
     const bloked = order.bun.map((x, index) => {
         const ingredient = getConstructorIngredient(data, x);
         if (!ingredient) {
             return "";
         }
-        let opt = {            
+        let opt = {
             text: ingredient.name,
             price: ingredient.price,
             thumbnail: ingredient.image,
             type: "top",
             isLocked: true,
-        };        
+        };
         let typeStr = " (верх)";
         if (index > 0) {
-            opt.type = "bottom";            
+            opt.type = "bottom";
             typeStr = " (низ)";
         }
-                        
+
         return (
-            <div key={ingredient._id+'_'+index} className={["pl-8", styles.element].join(" ")}>
+            <div key={ingredient._id + "_" + index} className={["pl-8", styles.element].join(" ")}>
                 <ConstructorElement {...{ ...opt, text: opt.text + typeStr }} />
             </div>
         );
@@ -66,13 +68,13 @@ export default function BurgerConstructor({ data }) {
         if (!ingredient) {
             return "";
         }
-        const opt = {            
+        const opt = {
             text: ingredient.name,
             price: ingredient.price,
             thumbnail: ingredient.image,
-        };        
+        };
         return (
-            <div key={ingredient._id+'_'+index} className={["pt-4", styles.element].join(" ")}>
+            <div key={ingredient._id + "_" + index} className={["pt-4", styles.element].join(" ")}>
                 <DragIcon type="primary" />
                 <span className="pl-2">
                     <ConstructorElement {...opt} />
@@ -81,7 +83,7 @@ export default function BurgerConstructor({ data }) {
         );
     });
 
-    const orderId = '034536'
+    const orderId = "034536";
     return (
         <section className={[styles.main, "pl-4"].join(" ")}>
             <div className="mt-25">{bloked[0]}</div>
@@ -94,7 +96,11 @@ export default function BurgerConstructor({ data }) {
                 <div className="mr-10">
                     <CurrencyIcon type="primary" />
                 </div>
-                {sendOrder&&<OrderDetails onClose={unSendOrderHandler} orderId={orderId}/>}
+                {sendOrder && (
+                    <Modal onClose={unSendOrderHandler} title="">
+                        <OrderDetails orderId={orderId} />
+                    </Modal>
+                )}
                 <Button type="primary" size="large" onClick={sendOrderHandler}>
                     Оформить заказ
                 </Button>
@@ -103,25 +109,6 @@ export default function BurgerConstructor({ data }) {
     );
 }
 
-const ingrediensPropTypes = PropTypes.shape({
-    _id: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-    type: PropTypes.string.isRequired,
-    proteins: PropTypes.number.isRequired,
-    fat: PropTypes.number.isRequired,
-    carbohydrates: PropTypes.number.isRequired,
-    calories: PropTypes.number.isRequired,
-    price: PropTypes.number.isRequired,
-    image: PropTypes.string.isRequired,
-    image_mobile: PropTypes.string.isRequired,
-    image_large: PropTypes.string.isRequired,
-    __v: PropTypes.number.isRequired,
-});
-
 BurgerConstructor.propTypes = {
-    data: PropTypes.arrayOf(
-        PropTypes.shape({
-            ingredien: ingrediensPropTypes,
-        })
-    ).isRequired,
+    data: PropTypes.arrayOf(ingrediensPropTypes).isRequired,
 };

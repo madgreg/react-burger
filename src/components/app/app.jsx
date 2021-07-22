@@ -24,7 +24,7 @@ export default function App() {
                 setData(data.data);
             })
             .catch((error) => {
-                throw new Error(error);
+                console.log(error)                
             });
     }, []);
 

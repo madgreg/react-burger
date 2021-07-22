@@ -4,25 +4,13 @@ import { Counter } from "@ya.praktikum/react-developer-burger-ui-components/dist
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components/dist/ui/icons/currency-icon";
 import IngredientDetails from "../ingredient-details/ingredient-details";
 import styles from "./bi-list.module.css";
+import { ingrediensPropTypes } from "../../types";
+import Modal from '../modal/modal';
 
-const getCaptionElement=(title)=>{
+
+const getCaptionElement = (title) => {
     return <div className="text text_type_main-medium">{title}</div>;
-}
-
-const ingrediensPropTypes = PropTypes.shape({
-    _id: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-    type: PropTypes.string.isRequired,
-    proteins: PropTypes.number.isRequired,
-    fat: PropTypes.number.isRequired,
-    carbohydrates: PropTypes.number.isRequired,
-    calories: PropTypes.number.isRequired,
-    price: PropTypes.number.isRequired,
-    image: PropTypes.string.isRequired,
-    image_mobile: PropTypes.string.isRequired,
-    image_large: PropTypes.string.isRequired,
-    __v: PropTypes.number.isRequired,
-});
+};
 
 const IngredienCard = ({ ingredien, count = 0, cssCls = "" }) => {
     const [viewDescription, setViewDescription] = React.useState(false);
@@ -47,7 +35,13 @@ const IngredienCard = ({ ingredien, count = 0, cssCls = "" }) => {
             <div style={{ height: 48, textAlign: "center" }} className="text text_type_main-default">
                 {ingredien.name}
             </div>
-            {viewDescription ? <IngredientDetails onClose={handleModalClose} ingredien={ingredien} /> : ""}
+            {viewDescription ? (
+                <Modal onClose={handleModalClose} title="Детали ингредиента">
+                    <IngredientDetails ingredien={ingredien} />
+                </Modal>
+            ) : (
+                ""
+            )}
         </div>
     );
 };
@@ -58,7 +52,7 @@ IngredienCard.propTypes = {
     cssCls: PropTypes.string,
 };
 
-const genMenu=(data)=>{
+const genMenu = (data) => {
     let predResult = {
         bun: {
             productList: [getCaptionElement("Булки")],
@@ -85,7 +79,7 @@ const genMenu=(data)=>{
             </div>
         );
     });
-}
+};
 
 export default function BIList({ data }) {
     const [menu, setMenu] = React.useState([]);
