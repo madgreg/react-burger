@@ -6,7 +6,7 @@ import IngredientDetails from "../ingredient-details/ingredient-details";
 import styles from "./bi-list.module.css";
 import { ingrediensPropTypes } from "../../types";
 import Modal from '../modal/modal';
-
+import { IngredientsContext } from "../../utils/contexts";
 
 const getCaptionElement = (title) => {
     return <div className="text text_type_main-medium">{title}</div>;
@@ -81,12 +81,13 @@ const genMenu = (data) => {
     });
 };
 
-export default function BIList({ data }) {
+export default function BIList() {
+    const {appData} = React.useContext(IngredientsContext);
     const [menu, setMenu] = React.useState([]);
 
     React.useEffect(() => {
-        setMenu(genMenu(data));
-    }, [data, setMenu]);
+        setMenu(genMenu(appData.burgerIngredients));
+    }, [appData.burgerIngredients, setMenu]);
 
     return (
         <section style={{ display: "contents" }}>
@@ -95,10 +96,10 @@ export default function BIList({ data }) {
     );
 }
 
-BIList.propTypes = {
-    data: PropTypes.arrayOf(
-        PropTypes.shape({
-            ingredien: ingrediensPropTypes,
-        })
-    ).isRequired,
-};
+// BIList.propTypes = {
+//     data: PropTypes.arrayOf(
+//         PropTypes.shape({
+//             ingredien: ingrediensPropTypes,
+//         })
+//     ).isRequired,
+// };

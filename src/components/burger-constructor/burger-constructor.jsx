@@ -1,46 +1,90 @@
 import { ConstructorElement } from "@ya.praktikum/react-developer-burger-ui-components/dist/ui/constructor-element";
-import React from "react";
+import React, { useContext } from "react";
 import styles from "./burger-constructor.module.css";
 import { DragIcon } from "@ya.praktikum/react-developer-burger-ui-components/dist/ui/icons/drag-icon";
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components/dist/ui/icons/currency-icon";
 import { Button } from "@ya.praktikum/react-developer-burger-ui-components/dist/ui/button";
 import OrderDetails from "../order-details/order-details";
-import PropTypes from "prop-types";
-import { ingrediensPropTypes } from "../../types";
-import Modal from '../modal/modal';
+// import PropTypes from "prop-types";
+// import { ingrediensPropTypes } from "../../types";
+import Modal from "../modal/modal";
+import { IngredientsContext } from "../../utils/contexts";
 
-const order = {
-    bun: ["60d3b41abdacab0026a733c6", "60d3b41abdacab0026a733c6"],
-    ingredients: [
-        "60d3b41abdacab0026a733c8",
-        "60d3b41abdacab0026a733c9",
-        "60d3b41abdacab0026a733ca",
-        "60d3b41abdacab0026a733cb",
-        "60d3b41abdacab0026a733cc",
-        "60d3b41abdacab0026a733cd",
-        "60d3b41abdacab0026a733ce",
-        "60d3b41abdacab0026a733cf",
-        "60d3b41abdacab0026a733d0",
-        "60d3b41abdacab0026a733d1",
-        "60d3b41abdacab0026a733d2",
-    ],
-};
+const URL = "https://norma.nomoreparties.space/api/orders";
 
 const getConstructorIngredient = (data, _id) => {
+    // console.log(data, _id)
     const ingredient = data.filter((x) => x._id === _id);
     return ingredient.length > 0 ? ingredient[0] : undefined;
 };
 
-export default function BurgerConstructor({ data }) {
+const initSate = {
+    summ: 0,
+};
+
+const reducer = (state, action) => {
+    switch (action.type) {
+        case "set":
+            const reducer = (accumulator, currentValue) => accumulator + currentValue;
+            const orderIngredient = action.value.order.bun.concat(action.value.order.ingredients);
+
+            return {
+                summ: orderIngredient
+                    .map((x) => {
+                        return getConstructorIngredient(action.value.burgerIngredients, x).price;
+                    })
+                    .reduce(reducer),
+            };
+        case "reset":
+            return initSate;
+        default:
+            return state;
+    }
+};
+
+export default function BurgerConstructor() {
+    const { appData, appDataDispatch } = useContext(IngredientsContext);
+    const [orderData, orderSummDispatch] = React.useReducer(reducer, initSate);
+
     const [sendOrder, setSendOrder] = React.useState(false);
     const sendOrderHandler = () => {
-        setSendOrder(true);
+        fetch(URL, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json;charset=utf-8",
+            },
+            body: JSON.stringify({ ingredients: appData.order.bun.concat(appData.order.ingredients) }),
+        })
+            .then((response) => {
+                if (response.status >= 400 && response.status < 600) {
+                    throw new Error("Bad response from server");
+                }
+                return response;
+            })
+            .then((response) => {
+                return response.json();
+            })
+            .then((data) => {
+                console.log(data.order.number);
+                appDataDispatch({ type: "setOrderId", value: data.order.number });
+                setSendOrder(true);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
     };
     const unSendOrderHandler = () => {
         setSendOrder(false);
     };
-    const bloked = order.bun.map((x, index) => {
-        const ingredient = getConstructorIngredient(data, x);
+
+    React.useEffect(() => {
+        if (appData.burgerIngredients.length > 0) {
+            orderSummDispatch({ type: "set", value: appData });
+        }
+    }, [appData.order, appData.burgerIngredients]);
+
+    const bloked = appData.order.bun.map((x, index) => {
+        const ingredient = getConstructorIngredient(appData.burgerIngredients, x);
         if (!ingredient) {
             return "";
         }
@@ -63,8 +107,8 @@ export default function BurgerConstructor({ data }) {
             </div>
         );
     });
-    const unbloked = order.ingredients.map((x, index) => {
-        const ingredient = getConstructorIngredient(data, x);
+    const unbloked = appData.order.ingredients.map((x, index) => {
+        const ingredient = getConstructorIngredient(appData.burgerIngredients, x);
         if (!ingredient) {
             return "";
         }
@@ -83,7 +127,6 @@ export default function BurgerConstructor({ data }) {
         );
     });
 
-    const orderId = "034536";
     return (
         <section className={[styles.main, "pl-4"].join(" ")}>
             <div className="mt-25">{bloked[0]}</div>
@@ -92,13 +135,13 @@ export default function BurgerConstructor({ data }) {
             </section>
             <div className="mt-4">{bloked[1]}</div>
             <div className={["mt-10", styles.price].join(" ")}>
-                <span className="mr-2 text text_type_digits-medium ">{1231}</span>
+                <span className="mr-2 text text_type_digits-medium ">{orderData.summ}</span>
                 <div className="mr-10">
                     <CurrencyIcon type="primary" />
                 </div>
                 {sendOrder && (
                     <Modal onClose={unSendOrderHandler} title="">
-                        <OrderDetails orderId={orderId} />
+                        <OrderDetails orderId={appData.orderId} />
                     </Modal>
                 )}
                 <Button type="primary" size="large" onClick={sendOrderHandler}>
@@ -109,6 +152,6 @@ export default function BurgerConstructor({ data }) {
     );
 }
 
-BurgerConstructor.propTypes = {
-    data: PropTypes.arrayOf(ingrediensPropTypes).isRequired,
-};
+// BurgerConstructor.propTypes = {
+//     data: PropTypes.arrayOf(ingrediensPropTypes).isRequired,
+// };
