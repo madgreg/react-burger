@@ -1,90 +1,113 @@
 import { ConstructorElement } from "@ya.praktikum/react-developer-burger-ui-components/dist/ui/constructor-element";
-import React, { useContext } from "react";
+import React, { useCallback, useRef } from "react";
 import styles from "./burger-constructor.module.css";
 import { DragIcon } from "@ya.praktikum/react-developer-burger-ui-components/dist/ui/icons/drag-icon";
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components/dist/ui/icons/currency-icon";
 import { Button } from "@ya.praktikum/react-developer-burger-ui-components/dist/ui/button";
 import OrderDetails from "../order-details/order-details";
-// import PropTypes from "prop-types";
-// import { ingrediensPropTypes } from "../../types";
 import Modal from "../modal/modal";
-import { IngredientsContext } from "../../utils/contexts";
+import { useSelector } from "react-redux";
+import { useDrag, useDrop } from "react-dnd";
+import { burgerIngredientConstructorReducer, sendOrder } from "services/redusers";
+import { useDispatch } from "react-redux";
+import PropTypes from "prop-types";
+import { ingrediensPropTypes } from "types";
 
-const URL = "https://norma.nomoreparties.space/api/orders";
-
-const getConstructorIngredient = (data, _id) => {
-    // console.log(data, _id)
-    const ingredient = data.filter((x) => x._id === _id);
-    return ingredient.length > 0 ? ingredient[0] : undefined;
-};
-
-const initSate = {
-    summ: 0,
-};
-
-const reducer = (state, action) => {
-    switch (action.type) {
-        case "set":
-            const reducer = (accumulator, currentValue) => accumulator + currentValue;
-            const orderIngredient = action.value.order.bun.concat(action.value.order.ingredients);
-
+const ConstructorElementWraper = ({ ingredient, index, opt, handleClose, moveIngredient }) => {    
+    const ref = useRef(null);
+    const [{ handlerId }, drop] = useDrop({
+        accept: "constructor",
+        collect(monitor) {
             return {
-                summ: orderIngredient
-                    .map((x) => {
-                        return getConstructorIngredient(action.value.burgerIngredients, x).price;
-                    })
-                    .reduce(reducer),
+                handlerId: monitor.getHandlerId(),
             };
-        case "reset":
-            return initSate;
-        default:
-            return state;
-    }
+        },
+        hover(item, monitor) {            
+            if (!ref.current) {
+                return;
+            }
+            const dragIndex = item.index;
+            const hoverIndex = index;
+
+            if (dragIndex === hoverIndex) {
+                return;
+            }
+            const hoverBoundingRect = ref.current?.getBoundingClientRect();
+            const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
+            const clientOffset = monitor.getClientOffset();
+            const hoverClientY = clientOffset.y - hoverBoundingRect.top;
+            if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
+                return;
+            }
+            if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) {
+                return;
+            }
+            moveIngredient(dragIndex, hoverIndex);
+            item.index = hoverIndex;
+        },
+    });
+
+    const [, drag] = useDrag({
+        type: "constructor",
+        item: () => {
+            return { ingredient, index };
+        }
+    });    
+
+    drag(drop(ref));
+
+    return (
+        <div ref={ref}  className={["pt-4", styles.element].join(" ")} data-handler-id={handlerId}>
+            <DragIcon type="primary" />
+            <span className="pl-2">
+                <ConstructorElement {...opt} handleClose={handleClose} />
+            </span>
+        </div>
+    );
+};
+
+ConstructorElementWraper.propTypes = {
+    ingredient: ingrediensPropTypes.isRequired,
+    index: PropTypes.number.isRequired,
+    opt: PropTypes.object.isRequired,
+    handleClose: PropTypes.func.isRequired,
+    moveIngredient: PropTypes.func.isRequired,
 };
 
 export default function BurgerConstructor() {
-    const { appData, appDataDispatch } = useContext(IngredientsContext);
-    const [orderData, orderSummDispatch] = React.useReducer(reducer, initSate);
+    const { orderId, orderSum } = useSelector((store) => store.burgerIngredientConstructor);
+    const order = useSelector((store) => store.burgerIngredientConstructor.order);
+    const { actions } = burgerIngredientConstructorReducer;
+    const dispatch = useDispatch();
 
-    const [sendOrder, setSendOrder] = React.useState(false);
+    const [, dropTarget] = useDrop({
+        accept: "ingredients",
+        drop(ingredien) {
+            onDropHandler(ingredien);
+        },
+    });
+
+    const onDropHandler = (ingredien) => {
+        dispatch(actions.addIngredient(ingredien));
+    };
+
     const sendOrderHandler = () => {
-        fetch(URL, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json;charset=utf-8",
-            },
-            body: JSON.stringify({ ingredients: appData.order.bun.concat(appData.order.ingredients) }),
-        })
-            .then((response) => {
-                if (response.status >= 400 && response.status < 600) {
-                    throw new Error("Bad response from server");
-                }
-                return response;
-            })
-            .then((response) => {
-                return response.json();
-            })
-            .then((data) => {
-                console.log(data.order.number);
-                appDataDispatch({ type: "setOrderId", value: data.order.number });
-                setSendOrder(true);
-            })
-            .catch((error) => {
-                console.log(error);
-            });
+        if (orderSum > 0) {
+            dispatch(sendOrder(order));
+        }
     };
     const unSendOrderHandler = () => {
-        setSendOrder(false);
+        console.log(1);
+        dispatch(actions.resetOrder());
     };
 
     React.useEffect(() => {
-        if (appData.burgerIngredients.length > 0) {
-            orderSummDispatch({ type: "set", value: appData });
+        if (order.bun.concat(order.ingredients).length > 0) {
+            dispatch(actions.setSummOrder());
         }
-    }, [appData.order, appData.burgerIngredients]);
+    }, [order, dispatch, actions]);
 
-    const bloked = appData.order.bun.map((x, index) => {
-        const ingredient = getConstructorIngredient(appData.burgerIngredients, x);
+    const bloked = order.bun.map((ingredient, index) => {
         if (!ingredient) {
             return "";
         }
@@ -107,8 +130,15 @@ export default function BurgerConstructor() {
             </div>
         );
     });
-    const unbloked = appData.order.ingredients.map((x, index) => {
-        const ingredient = getConstructorIngredient(appData.burgerIngredients, x);
+
+    const moveIngredient = useCallback(
+        (dragIndex, hoverIndex) => {
+            dispatch(actions.chagneIngredientPosition({dragIndex,hoverIndex}))
+        },
+        [actions, dispatch]
+    );
+
+    const unbloked = order.ingredients.map((ingredient, index) => {
         if (!ingredient) {
             return "";
         }
@@ -117,31 +147,26 @@ export default function BurgerConstructor() {
             price: ingredient.price,
             thumbnail: ingredient.image,
         };
-        return (
-            <div key={ingredient._id + "_" + index} className={["pt-4", styles.element].join(" ")}>
-                <DragIcon type="primary" />
-                <span className="pl-2">
-                    <ConstructorElement {...opt} />
-                </span>
-            </div>
-        );
+        const handleClose = () => dispatch(actions.delIngredient(index));
+        const key = index;
+        return <ConstructorElementWraper {...{ ingredient, key, index, opt, handleClose, moveIngredient }} />;
     });
 
     return (
         <section className={[styles.main, "pl-4"].join(" ")}>
             <div className="mt-25">{bloked[0]}</div>
-            <section style={{ display: "contents" }}>
-                <div style={{ overflowY: "auto", height: 480 }}>{unbloked} </div>
+            <section style={{ display: "contents" }} ref={dropTarget}>
+                <div style={{ overflowY: "auto", height: 480 }}>{unbloked}</div>
             </section>
             <div className="mt-4">{bloked[1]}</div>
             <div className={["mt-10", styles.price].join(" ")}>
-                <span className="mr-2 text text_type_digits-medium ">{orderData.summ}</span>
+                <span className="mr-2 text text_type_digits-medium ">{orderSum}</span>
                 <div className="mr-10">
                     <CurrencyIcon type="primary" />
                 </div>
-                {sendOrder && (
+                {orderId && (
                     <Modal onClose={unSendOrderHandler} title="">
-                        <OrderDetails orderId={appData.orderId} />
+                        <OrderDetails orderId={orderId + ""} />
                     </Modal>
                 )}
                 <Button type="primary" size="large" onClick={sendOrderHandler}>
@@ -151,7 +176,3 @@ export default function BurgerConstructor() {
         </section>
     );
 }
-
-// BurgerConstructor.propTypes = {
-//     data: PropTypes.arrayOf(ingrediensPropTypes).isRequired,
-// };
