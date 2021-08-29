@@ -8,12 +8,14 @@ import OrderDetails from "../order-details/order-details";
 import Modal from "../modal/modal";
 import { useSelector } from "react-redux";
 import { useDrag, useDrop } from "react-dnd";
-import { burgerIngredientConstructorReducer, sendOrder } from "services/redusers";
+import { Redirect, useHistory } from "react-router-dom";
+
 import { useDispatch } from "react-redux";
 import PropTypes from "prop-types";
 import { ingrediensPropTypes } from "types";
+import { burgerIngredientConstructorReducer, sendOrder } from "services/reduсers/slices/constructor-Ingredients";
 
-const ConstructorElementWraper = ({ ingredient, index, opt, handleClose, moveIngredient }) => {    
+const ConstructorElementWraper = ({ ingredient, index, opt, handleClose, moveIngredient }) => {
     const ref = useRef(null);
     const [{ handlerId }, drop] = useDrop({
         accept: "constructor",
@@ -22,7 +24,7 @@ const ConstructorElementWraper = ({ ingredient, index, opt, handleClose, moveIng
                 handlerId: monitor.getHandlerId(),
             };
         },
-        hover(item, monitor) {            
+        hover(item, monitor) {
             if (!ref.current) {
                 return;
             }
@@ -51,13 +53,13 @@ const ConstructorElementWraper = ({ ingredient, index, opt, handleClose, moveIng
         type: "constructor",
         item: () => {
             return { ingredient, index };
-        }
-    });    
+        },
+    });
 
     drag(drop(ref));
 
     return (
-        <div ref={ref}  className={["pt-4", styles.element].join(" ")} data-handler-id={handlerId}>
+        <div ref={ref} className={["pt-4", styles.element].join(" ")} data-handler-id={handlerId}>
             <DragIcon type="primary" />
             <span className="pl-2">
                 <ConstructorElement {...opt} handleClose={handleClose} />
@@ -78,7 +80,9 @@ export default function BurgerConstructor() {
     const { orderId, orderSum } = useSelector((store) => store.burgerIngredientConstructor);
     const order = useSelector((store) => store.burgerIngredientConstructor.order);
     const { actions } = burgerIngredientConstructorReducer;
+    const { isAuth } = useSelector((store) => store.userInfo);
     const dispatch = useDispatch();
+    const history = useHistory();
 
     const [, dropTarget] = useDrop({
         accept: "ingredients",
@@ -91,9 +95,18 @@ export default function BurgerConstructor() {
         dispatch(actions.addIngredient(ingredien));
     };
 
-    const sendOrderHandler = () => {
+    const sendOrderHandler = () => {        
         if (orderSum > 0) {
-            dispatch(sendOrder(order));
+            console.log(isAuth)
+            if (!isAuth) {
+                history.replace({
+                        pathname: "/login",
+                        state: { referrer: history.location.pathname },
+                    });
+            }else{
+                dispatch(sendOrder(order));            
+            }
+            
         }
     };
     const unSendOrderHandler = () => {
@@ -133,7 +146,7 @@ export default function BurgerConstructor() {
 
     const moveIngredient = useCallback(
         (dragIndex, hoverIndex) => {
-            dispatch(actions.chagneIngredientPosition({dragIndex,hoverIndex}))
+            dispatch(actions.chagneIngredientPosition({ dragIndex, hoverIndex }));
         },
         [actions, dispatch]
     );

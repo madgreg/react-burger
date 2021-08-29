@@ -8,7 +8,7 @@ import "./index.css";
 import reportWebVitals from "./reportWebVitals";
 
 import { configureStore } from "@reduxjs/toolkit";
-import {rootReducer} from "./services/redusers";
+import {rootReducer} from "./services/reduсers/root-reduser";
 
 const store = configureStore({
     reducer: rootReducer,

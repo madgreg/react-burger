@@ -8,8 +8,9 @@ import { ingrediensPropTypes } from "../../types";
 import Modal from "../modal/modal";
 import { useSelector, useDispatch } from "react-redux";
 import { bunMenu, mainMenu, sauceMenu } from "utils/vars";
-import { burgerIngredientReducer } from "services/redusers";
+
 import { useDrag } from "react-dnd";
+import { burgerIngredientReducer } from "services/reduсers/slices/burger-ingredient";
 
 const getCaptionElement = (title, cssCls = "") => {
     return (

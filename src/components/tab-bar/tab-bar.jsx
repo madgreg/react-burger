@@ -3,7 +3,8 @@ import styles from "./tab-bar.module.css";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components/dist/ui/tab";
 import { bunMenu, mainMenu, sauceMenu } from "utils/vars";
 import { useSelector, useDispatch } from "react-redux";
-import { burgerIngredientReducer } from "services/redusers";
+import { burgerIngredientReducer } from "services/reduсers/slices/burger-ingredient";
+
 
 export default function TabBar() {
     const dispatch = useDispatch();

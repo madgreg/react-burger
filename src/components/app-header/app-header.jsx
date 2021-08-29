@@ -1,6 +1,7 @@
 import { Logo } from "@ya.praktikum/react-developer-burger-ui-components/dist/ui/logo";
 import React from "react";
 import HeaderButton from "../header-button/header-button";
+import { Link } from "react-router-dom";
 import styles from "./app-header.module.css";
 
 export default function AppHeader() {
@@ -11,7 +12,7 @@ export default function AppHeader() {
                     <HeaderButton iconName="BurgerIcon" iconType="primary" inActive={0} first={1}>
                         Конструктор
                     </HeaderButton>
-                    <HeaderButton iconName="ListIcon" iconType="secondary" >
+                    <HeaderButton iconName="ListIcon" iconType="secondary">
                         Лента заказов
                     </HeaderButton>
                 </section>
@@ -19,9 +20,11 @@ export default function AppHeader() {
                     <Logo />
                 </section>
                 <section className={[styles.nav_block, styles.last].join(" ")}>
-                    <HeaderButton iconName="ProfileIcon" iconType="secondary" >
-                        Личный кабинет
-                    </HeaderButton>
+                    <Link to="/profile">
+                        <HeaderButton iconName="ProfileIcon" iconType="secondary">
+                            Личный кабинет
+                        </HeaderButton>
+                    </Link>
                 </section>
             </nav>
         </div>
