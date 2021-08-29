@@ -5,7 +5,7 @@ import React from "react";
 import styles from "./header-button.module.css";
 import PropTypes from "prop-types";
 
-export default function HeaderButton({ iconName, iconType, inActive = 1, first = 0, children }) {
+export default function HeaderButton({ iconName, iconType, inActive = 1, first = 0, children, onClick=()=>{} }) {
     let icon;
 
     switch (iconName) {
@@ -24,7 +24,7 @@ export default function HeaderButton({ iconName, iconType, inActive = 1, first =
     let cssClassesDefaultArray = ["pl-5 pr-5", styles.nav_button, first ? "" : "ml-2"];
 
     return (
-        <button className={cssClassesDefaultArray.join(" ")}>
+        <button className={cssClassesDefaultArray.join(" ")} onClick={onClick}>
             {icon}
             <span className={"pl-2 text text_type_main-default " + (inActive ? "text_color_inactive" : "")}>{children}</span>
         </button>

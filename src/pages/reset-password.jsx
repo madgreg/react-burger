@@ -6,7 +6,7 @@ import styles from "./login.module.css";
 
 import { resetPassword, userInfoReducer } from "services/reduсers/slices/user-Info";
 
-import { Link, useHistory, useLocation } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 const ResetPasswordPage = () => {
     const [form, setValue] = useState({ password: "", token: "" });
@@ -20,7 +20,7 @@ const ResetPasswordPage = () => {
         if (!history.location.state || history.location.state.referrer !== "/forgot-password") {
             history.replace({ pathname: "/forgot-password" });
         }
-    }, []);
+    }, [history]);
 
     const onChange = (e) => {
         setValue({ ...form, [e.target.name]: e.target.value });

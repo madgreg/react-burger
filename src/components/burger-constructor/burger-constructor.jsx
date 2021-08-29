@@ -8,7 +8,7 @@ import OrderDetails from "../order-details/order-details";
 import Modal from "../modal/modal";
 import { useSelector } from "react-redux";
 import { useDrag, useDrop } from "react-dnd";
-import { Redirect, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 import { useDispatch } from "react-redux";
 import PropTypes from "prop-types";
@@ -96,8 +96,8 @@ export default function BurgerConstructor() {
     };
 
     const sendOrderHandler = () => {        
-        if (orderSum > 0) {
-            console.log(isAuth)
+        if (order.bun.length > 0) {
+            
             if (!isAuth) {
                 history.replace({
                         pathname: "/login",

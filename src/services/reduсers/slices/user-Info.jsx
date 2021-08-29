@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getCookie, setCookie } from "utils/funcs";
-import { forgotPasswordRequest, getUserInfoRequest, loginRequest, refreshTokenRequest, registerRequest, resetPasswordRequest } from "../api";
+import { deleteCookie, getCookie, setCookie } from "utils/funcs";
+import { forgotPasswordRequest, getUserInfoRequest, loginRequest, logoutRequest, refreshTokenRequest, registerRequest, resetPasswordRequest, updateUserInfoRequest } from "../api";
 import { appReducer } from "./app";
 
 export const appStart = () => (dispatch, getState) => {
@@ -21,7 +21,7 @@ export const appStart = () => (dispatch, getState) => {
                         if (data.success) {
                             dispatch(userInfoReducer.actions.setUserInfo(data.user));
                             dispatch(userInfoReducer.actions.setAuth(true));
-                            dispatch(appReducer.actions.setLoad(true));
+                            // dispatch(appReducer.actions.setLoad(true));
                         } else {
                             console.log(data.message);
                         }
@@ -36,7 +36,7 @@ export const appStart = () => (dispatch, getState) => {
             });
     } else {
         dispatch(userInfoReducer.actions.setAuth(false));
-        dispatch(appReducer.actions.setLoad(true));
+        // dispatch(appReducer.actions.setLoad(true));
     }
 };
 
@@ -46,10 +46,7 @@ export const logIn = (form) => (dispatch, getState) => {
             return response.json();
         })
         .then((data) => {
-            if (data.success) {
-                // dispatch(userInfoReducer.actions.loginRes({
-                //     ...data.user, isAuth: true, accessToken: data.accessToken.split(" ")[1]
-                // }))
+            if (data.success) {                
                 dispatch(userInfoReducer.actions.setUserInfo(data.user));
                 dispatch(userInfoReducer.actions.setAuth(true));                
                 dispatch(userInfoReducer.actions.setAccessToken(data.accessToken.split(" ")[1]));
@@ -115,6 +112,38 @@ export const resetPassword = (form) => (dispatch, getState) => {
         });
 };
 
+export const logout = () => (dispatch, getState) => {
+    logoutRequest().then((response) => {
+        return response.json();
+    }).then((data) => {
+        if (data.success) {
+            dispatch(userInfoReducer.actions.resetState());
+            deleteCookie("refreshToken")
+            dispatch(userInfoReducer.actions.setAuth(false));
+        } else {
+            console.log(data.message);
+        }
+    })
+    .catch((error) => {
+        console.log(error);
+    });
+}
+
+export const updateUserInfo = (form, token) => (dispatch, getState) => {
+    updateUserInfoRequest(form, token).then((response) => {
+        return response.json();
+    }).then((data) => {
+        if (data.success) {
+            dispatch(userInfoReducer.actions.setUserInfo(data.user));
+        } else {
+            console.log(data.message);
+        }
+    })
+    .catch((error) => {
+        console.log(error);
+    });
+}
+
 const initState = {
     redirectTo: null,    
     isAuth: false,
@@ -127,11 +156,15 @@ export const userInfoReducer = createSlice({
     name: "userInfoReducer",
     initialState: initState,
     reducers: {
+        resetState:(state) => {
+            state = { ...initState };
+        },
         loginRes: (state, action) => {
             state = { ...state, ...action.payload };
         },
         setUserInfo: (state, action) => {
-            state = { ...state, name: action.payload.name, email: action.payload.email };
+            state.name = action.payload.name
+            state.email = action.payload.email 
         },
         setAuth: (state, action) => {
             state.isAuth = action.payload;

@@ -1,5 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { bunMenu } from "utils/vars";
+import { appReducer } from "./app";
+
 
 // burgerIngredient API
 
@@ -23,6 +25,7 @@ export const loadBurgerIngredient = () => (dispatch, getState) => {
         })
         .then((data) => {
             dispatch(burgerIngredientReducer.actions.setData(data.data));
+            dispatch(appReducer.actions.setLoad(true));
         })
         .catch((error) => {
             console.log(error);
@@ -34,7 +37,9 @@ export const burgerIngredientReducer = createSlice({
     initialState: initBurgerIngredientState,
     reducers: {
         setCurrentViewIngredient: (state, action) => {            
-            state.currentViewIngredient = action.payload;
+            const ingridient = state.burgerIngredients.filter(x=>x._id===action.payload)[0]
+            console.log(ingridient)
+            state.currentViewIngredient = ingridient;
         },
         setTab: (state, action) => {
             state.currentTab = action.payload;

@@ -1,7 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initState = {
-    isLoad: false
+    isLoad: false,
+    activePage: 'home'
 };
 
 export const appReducer = createSlice({
@@ -10,6 +11,9 @@ export const appReducer = createSlice({
     reducers: {
         setLoad:(state,action)=>{
             state.isLoad = action.payload;
+        },
+        setActivePage:(state,action)=>{
+            state.activePage = action.payload;
         }
     },
 });

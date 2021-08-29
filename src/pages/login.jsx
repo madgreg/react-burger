@@ -12,8 +12,7 @@ const LoginPage = () => {
     const { redirectTo } = useSelector((store) => store.userInfo);
     const { setRedirectTo } = userInfoReducer.actions;
     const dispatch = useDispatch()
-    const history = useHistory();
-        
+    const history = useHistory();       
     
 
     const onChange = (e) => {

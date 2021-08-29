@@ -15,7 +15,8 @@ code {
 }
 
 
-.loginPanel .input, .loginPanel .input__container{
+.loginPanel .input, .loginPanel .input__container,
+.ProfilEditPanel .input, .ProfilEditPanel .input__container{
   width:100% !important
 }
 

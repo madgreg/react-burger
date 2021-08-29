@@ -15,20 +15,6 @@ export const serializeQuery = (queryParams) =>
         return `${acc}${encodeURIComponent(key)}=${encodeURIComponent(value)}${postfix}`;
     }, "?");
 
-export const logoutRequest = async () => {
-    return await fetch("https://cosmic.nomoreparties.space/logout", {
-        method: "POST",
-        mode: "cors",
-        cache: "no-cache",
-        credentials: "same-origin",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        redirect: "follow",
-        referrerPolicy: "no-referrer",
-    });
-};
-
 //////
 export const registerRequest = async (form) => {
     return await fetch("https://norma.nomoreparties.space/api/auth/register", {
@@ -121,3 +107,37 @@ export const resetPasswordRequest = async (form) =>
         referrerPolicy: "no-referrer",
         body: JSON.stringify(form),
     });
+
+export const logoutRequest = async () => {
+    return await fetch("https://norma.nomoreparties.space/api/auth/logout", {
+        method: "POST",
+        mode: "cors",
+        cache: "no-cache",
+        credentials: "same-origin",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        redirect: "follow",
+        referrerPolicy: "no-referrer",
+        body: JSON.stringify({
+            token: getCookie("refreshToken"),
+        }),
+    });
+};
+
+export const updateUserInfoRequest = async (form, token) => {
+    return await fetch("https://norma.nomoreparties.space/api/auth/user", {
+        method: "PATCH",
+        mode: "cors",
+        cache: "no-cache",
+        credentials: "same-origin",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + token,
+        },
+        redirect: "follow",
+        referrerPolicy: "no-referrer",
+        body: JSON.stringify(form),
+    });
+};
+

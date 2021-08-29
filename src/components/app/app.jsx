@@ -13,16 +13,18 @@ import { loadBurgerIngredient } from "services/reduсers/slices/burger-ingredien
 import HomePage from "pages/home";
 import { ProtectedRoute } from "components/protected-route/protected-route";
 import { appStart } from "services/reduсers/slices/user-Info";
+import ProfilePage from "pages/profile";
+import { ProtectedRouteAuth } from "components/protected-route/protected-route-auth";
+import IngredientDetails from "components/ingredient-details/ingredient-details";
 
 export default function App() {
     const dispatch = useDispatch();
     const { isLoad } = useSelector((store) => store.appInfo);
 
     useEffect(() => {
-        dispatch(loadBurgerIngredient());
+        dispatch(loadBurgerIngredient());        
         dispatch(appStart());
     }, [dispatch]);
-    
 
     return (
         <section className={styles.app}>
@@ -34,26 +36,54 @@ export default function App() {
                             <Route path="/" exact={true}>
                                 <HomePage />
                             </Route>
-                            <Route path="/login" exact={true}>
+                            <ProtectedRouteAuth path="/login" exact={true}>
                                 <LoginPage />
-                            </Route>
+                            </ProtectedRouteAuth>
                             <Route path="/register" exact={true}>
                                 <RegisterPage />
                             </Route>
-                            <Route path="/forgot-password" exact={true}>
+                            <ProtectedRouteAuth path="/forgot-password" exact={true}>
                                 <ForgotPasswordPage />
-                            </Route>
-                            <Route path="/reset-password" exact={true}>
+                            </ProtectedRouteAuth>
+                            <ProtectedRouteAuth path="/reset-password" exact={true}>
                                 <ResetPasswordPage />
-                            </Route>
+                            </ProtectedRouteAuth>
                             <ProtectedRoute path="/profile" exact={true}>
-                                profil
+                                <ProfilePage />
                             </ProtectedRoute>
-                            <Route path="/ingredients/:id" exact={true}>
-                                ingredients
-                            </Route>
-                            <Route path="/404" exact={true}>
-                                404
+                            <ProtectedRoute path="/profile/orders" exact={true}>
+                                <ProfilePage />
+                            </ProtectedRoute>
+                            <ProtectedRoute path="/profile/orders/:id" exact={true}>
+                                <ProfilePage />
+                            </ProtectedRoute>
+
+                            <Route
+                                path="/ingredients/:id"
+                                exact={true}
+                                render={(state) => {
+                                    return (
+                                        <>
+                                            {state.location.state && (
+                                                <>
+                                                    <HomePage />
+                                                    <IngredientDetails />
+                                                </>
+                                            )}
+                                            {!state.location.state && (
+                                                <>
+                                                    <IngredientDetails />
+                                                </>
+                                            )}
+                                        </>
+                                    );
+                                }}
+                            />
+
+                            <Route>
+                                <div className="text text_type_main-large mt-30" style={{ textAlign: "center", width: "100%" }}>
+                                    Вы нас с кемто перепутали, у нас нет ТАКОГО
+                                </div>
                             </Route>
                         </Switch>
                     </main>

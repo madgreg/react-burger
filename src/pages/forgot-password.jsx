@@ -1,12 +1,12 @@
 import { Button, Input } from "@ya.praktikum/react-developer-burger-ui-components";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback,  useState } from "react";
 import { Link } from "react-router-dom";
 import styles from "./login.module.css";
 import { useDispatch } from "react-redux";
 import { forgotPassword, userInfoReducer } from "services/reduсers/slices/user-Info";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { Redirect } from "react-router";
+
 
 const ForgotPasswordPage = () => {
     const [form, setValue] = useState({ email: "" });
