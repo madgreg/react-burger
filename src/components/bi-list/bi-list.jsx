@@ -19,13 +19,16 @@ const getCaptionElement = (title, cssCls = "") => {
     );
 };
 
-const IngredienCard = ({ ingredien, count = 0, cssCls = "" }) => {       
-    const history = useHistory()
+const IngredienCard = ({ ingredien, count = 0, cssCls = "" }) => {
+    const history = useHistory();
+    const { actions } = burgerIngredientReducer;
+    const dispatcn = useDispatch()
     const [{ isDrag }, dragRef] = useDrag({
         type: "ingredients",
         item: ingredien,
-    });    
-    const handleModalOpen = () => {   
+    });
+    const handleModalOpen = () => {
+        dispatcn(actions.setModal(true))
         history.replace({
             pathname: `/ingredients/${ingredien._id}`,
             state: { referrer: history.location.pathname },
@@ -45,7 +48,7 @@ const IngredienCard = ({ ingredien, count = 0, cssCls = "" }) => {
                 </div>
                 <div style={{ height: 48, textAlign: "center" }} className="text text_type_main-default">
                     {ingredien.name}
-                </div>               
+                </div>
             </div>
         )
     );

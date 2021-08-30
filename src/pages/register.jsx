@@ -31,7 +31,7 @@ const RegisterPage = () => {
 
     return (
         <div style={{ width: 480, margin: "auto" }}>
-            <form>
+            <form onSubmit={register}>
                 <div className={["loginPanel", styles.loginPanel].join(" ")}>
                     <p className="text text_type_main-medium mb-6">Регистрация</p>
                     <div className="mb-6 input">

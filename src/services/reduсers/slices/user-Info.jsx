@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { deleteCookie, getCookie, setCookie } from "utils/funcs";
 import { forgotPasswordRequest, getUserInfoRequest, loginRequest, logoutRequest, refreshTokenRequest, registerRequest, resetPasswordRequest, updateUserInfoRequest } from "../api";
 import { appReducer } from "./app";
+// import { appReducer } from "./app";
 
 export const appStart = () => (dispatch, getState) => {
     // если авторизировались раньше, получаем свежий токен
@@ -21,6 +22,7 @@ export const appStart = () => (dispatch, getState) => {
                         if (data.success) {
                             dispatch(userInfoReducer.actions.setUserInfo(data.user));
                             dispatch(userInfoReducer.actions.setAuth(true));
+                            dispatch(appReducer.actions.setTmpFg());
                             // dispatch(appReducer.actions.setLoad(true));
                         } else {
                             console.log(data.message);
@@ -36,6 +38,7 @@ export const appStart = () => (dispatch, getState) => {
             });
     } else {
         dispatch(userInfoReducer.actions.setAuth(false));
+        dispatch(appReducer.actions.setTmpFg());
         // dispatch(appReducer.actions.setLoad(true));
     }
 };
@@ -130,6 +133,7 @@ export const logout = () => (dispatch, getState) => {
 }
 
 export const updateUserInfo = (form, token) => (dispatch, getState) => {
+    
     updateUserInfoRequest(form, token).then((response) => {
         return response.json();
     }).then((data) => {

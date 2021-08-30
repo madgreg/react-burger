@@ -20,11 +20,14 @@ import IngredientDetails from "components/ingredient-details/ingredient-details"
 export default function App() {
     const dispatch = useDispatch();
     const { isLoad } = useSelector((store) => store.appInfo);
+    const { isModal } = useSelector((store) => store.burgerIngredient);    
 
     useEffect(() => {
-        dispatch(loadBurgerIngredient());        
-        dispatch(appStart());
+        dispatch(loadBurgerIngredient());
+        dispatch(appStart());                
     }, [dispatch]);
+
+    useEffect(()=>{},[isLoad])
 
     return (
         <section className={styles.app}>
@@ -61,16 +64,16 @@ export default function App() {
                             <Route
                                 path="/ingredients/:id"
                                 exact={true}
-                                render={(state) => {
+                                render={(state) => {                                    
                                     return (
                                         <>
-                                            {state.location.state && (
+                                            {state.location.state && state.location.state.referrer && isModal && (
                                                 <>
                                                     <HomePage />
                                                     <IngredientDetails />
                                                 </>
                                             )}
-                                            {!state.location.state && (
+                                            {!isModal && (
                                                 <>
                                                     <IngredientDetails />
                                                 </>

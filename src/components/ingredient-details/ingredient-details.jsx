@@ -21,24 +21,32 @@ export default function IngredientDetails() {
     const location = useLocation();
     const history = useHistory()
     const ingredien = useSelector((store) => store.burgerIngredient.currentViewIngredient);
+    const { isModal } = useSelector((store) => store.burgerIngredient);
     const { actions } = burgerIngredientReducer;
     const dispatch = useDispatch();
+    
+
     useEffect(() => {
         dispatch(actions.setCurrentViewIngredient(params.id));
+        // return history.replace({
+        //     state:  undefined
+        // });
     }, [params.id,actions,dispatch]);
 
     const handleModalClose = () => {
         dispatch(actions.setCurrentViewIngredient(null));
+        dispatch(actions.setModal(false))
         if(location.state){
             history.replace({
-                pathname:  location.state.referrer
+                pathname:  location.state.referrer,
+                state:  undefined
             });
         }
     };
 
     return (
         <>
-            {ingredien && location.state && (
+            {ingredien && location.state && isModal && (
                 <Modal onClose={handleModalClose} title="Детали ингредиента">
                     <div className={styles.box}>
                         <img src={ingredien.image_large} alt={ingredien.name} />
@@ -54,7 +62,7 @@ export default function IngredientDetails() {
                     </div>
                 </Modal>
             )}
-            {ingredien && !location.state && (
+            {ingredien && !isModal && (
 
                 <div className={styles.box}>
                     <div className="text text_type_main-large mt-30">Детали ингредиента</div>

@@ -21,7 +21,9 @@ export default function AppHeader() {
                     </HeaderButton>
                 </section>
                 <section className={[styles.nav_block, styles.logo].join(" ")}>
-                    <Logo />
+                    <Link to="/">
+                        <Logo />
+                    </Link>
                 </section>
                 <section className={[styles.nav_block, styles.last].join(" ")}>
                     <Link to="/profile">

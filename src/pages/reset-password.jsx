@@ -14,7 +14,6 @@ const ResetPasswordPage = () => {
     const { setRedirectTo } = userInfoReducer.actions;
     const dispatch = useDispatch();
     const history = useHistory();
-  
 
     useEffect(() => {
         if (!history.location.state || history.location.state.referrer !== "/forgot-password") {
@@ -46,28 +45,36 @@ const ResetPasswordPage = () => {
         <>
             {!redirectTo && (
                 <div style={{ width: 480, margin: "auto" }}>
-                    <div className={["loginPanel", styles.loginPanel].join(" ")}>
-                        <p className="text text_type_main-medium mb-6">Востановление пароля</p>
-                        <div className="mb-6 input">
-                            <PasswordInput onChange={onChange} value={form.password} name={"password"} size={"default"} placeholder={"Введите новый пароль"} />
-                        </div>
-                        <div className="mb-6 input">
-                            <Input placeholder={"Введите код из письма"} onChange={onChange} value={form.token} name="token" size={"default"} />
-                        </div>
+                    <form onSubmit={onClickHandler}>
+                        <div className={["loginPanel", styles.loginPanel].join(" ")}>
+                            <p className="text text_type_main-medium mb-6">Востановление пароля</p>
+                            <div className="mb-6 input">
+                                <PasswordInput
+                                    onChange={onChange}
+                                    value={form.password}
+                                    name={"password"}
+                                    size={"default"}
+                                    placeholder={"Введите новый пароль"}
+                                />
+                            </div>
+                            <div className="mb-6 input">
+                                <Input placeholder={"Введите код из письма"} onChange={onChange} value={form.token} name="token" size={"default"} />
+                            </div>
 
-                        <div className="mb-20">
-                            <Button type="primary" size="medium" onClick={onClickHandler}>
-                                Сохранить
-                            </Button>
-                        </div>
+                            <div className="mb-20">
+                                <Button type="primary" size="medium" onClick={onClickHandler}>
+                                    Сохранить
+                                </Button>
+                            </div>
 
-                        <div className="text text_type_main-small mb-4">
-                            <span style={{ color: "#8585AD" }}>Вспомнили пароль?</span>
-                            <Link to="/login">
-                                <span style={{ color: "#4C4CFF" }}> Войти</span>
-                            </Link>
+                            <div className="text text_type_main-small mb-4">
+                                <span style={{ color: "#8585AD" }}>Вспомнили пароль?</span>
+                                <Link to="/login">
+                                    <span style={{ color: "#4C4CFF" }}> Войти</span>
+                                </Link>
+                            </div>
                         </div>
-                    </div>
+                    </form>
                 </div>
             )}
         </>

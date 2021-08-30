@@ -6,6 +6,7 @@ import { appReducer } from "./app";
 // burgerIngredient API
 
 const initBurgerIngredientState = {
+    isModal: false,
     currentTab: bunMenu,
     burgerIngredients: [],
     currentViewIngredient: null,
@@ -25,7 +26,8 @@ export const loadBurgerIngredient = () => (dispatch, getState) => {
         })
         .then((data) => {
             dispatch(burgerIngredientReducer.actions.setData(data.data));
-            dispatch(appReducer.actions.setLoad(true));
+            dispatch(appReducer.actions.setTmpFg());            
+            // dispatch(appReducer.actions.setLoad(true));
         })
         .catch((error) => {
             console.log(error);
@@ -36,9 +38,11 @@ export const burgerIngredientReducer = createSlice({
     name: "burgerIngredient",
     initialState: initBurgerIngredientState,
     reducers: {
+        setModal: (state, action) => {
+            state.isModal = action.payload;
+        },
         setCurrentViewIngredient: (state, action) => {            
-            const ingridient = state.burgerIngredients.filter(x=>x._id===action.payload)[0]
-            console.log(ingridient)
+            const ingridient = state.burgerIngredients.filter(x=>x._id===action.payload)[0]            
             state.currentViewIngredient = ingridient;
         },
         setTab: (state, action) => {
