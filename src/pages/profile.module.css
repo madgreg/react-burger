@@ -1,0 +1,14 @@
+ul li {
+    height: 64px;
+    font-weight: 100 !important;
+}
+
+
+.inactive{
+    color: #8585AD;
+}
+
+a {
+    text-decoration: none;
+    color: #F2F2F3;
+}

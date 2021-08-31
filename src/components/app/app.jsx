@@ -1,29 +1,104 @@
-import React from "react";
+import React, { useEffect } from "react";
 import AppHeader from "../app-header/app-header";
-import BurgerConstructor from "../burger-constructor/burger-constructor";
-import BurgerIngredients from "../burger-ingredients/burger-ingredients";
 import styles from "./app.module.css";
-import { useDispatch } from "react-redux";
-import { loadBurgerIngredient } from "../../services/redusers";
-import { DndProvider } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
+import { useDispatch, useSelector } from "react-redux";
+
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import LoginPage from "pages/login";
+import RegisterPage from "pages/register";
+import ForgotPasswordPage from "pages/forgot-password";
+import ResetPasswordPage from "pages/reset-password";
+import { loadBurgerIngredient } from "services/reduсers/slices/burger-ingredient";
+
+import HomePage from "pages/home";
+import { ProtectedRoute } from "components/protected-route/protected-route";
+import { appStart } from "services/reduсers/slices/user-Info";
+import ProfilePage from "pages/profile";
+import { ProtectedRouteAuth } from "components/protected-route/protected-route-auth";
+import IngredientDetails from "components/ingredient-details/ingredient-details";
 
 export default function App() {
     const dispatch = useDispatch();
+    const { isLoad } = useSelector((store) => store.appInfo);
+    const { isModal } = useSelector((store) => store.burgerIngredient);    
 
-    React.useEffect(() => {
+    useEffect(() => {
         dispatch(loadBurgerIngredient());
+        dispatch(appStart());                
     }, [dispatch]);
+
+    useEffect(()=>{},[isLoad])
 
     return (
         <section className={styles.app}>
-            <AppHeader />
-            <main className={styles.main_content}>
-                <DndProvider backend={HTML5Backend}>
-                    <BurgerIngredients />
-                    <BurgerConstructor />
-                </DndProvider>
-            </main>
+            <Router>
+                <AppHeader />
+                {isLoad && (
+                    <main className={styles.main_content}>
+                        <Switch>
+                            <Route path="/" exact={true}>
+                                <HomePage />
+                            </Route>
+                            <ProtectedRouteAuth path="/login" exact={true}>
+                                <LoginPage />
+                            </ProtectedRouteAuth>
+                            <Route path="/register" exact={true}>
+                                <RegisterPage />
+                            </Route>
+                            <ProtectedRouteAuth path="/forgot-password" exact={true}>
+                                <ForgotPasswordPage />
+                            </ProtectedRouteAuth>
+                            <ProtectedRouteAuth path="/reset-password" exact={true}>
+                                <ResetPasswordPage />
+                            </ProtectedRouteAuth>
+                            <ProtectedRoute path="/profile" exact={true}>
+                                <ProfilePage />
+                            </ProtectedRoute>
+                            <ProtectedRoute path="/profile/orders" exact={true}>
+                                <ProfilePage />
+                            </ProtectedRoute>
+                            <ProtectedRoute path="/profile/orders/:id" exact={true}>
+                                <ProfilePage />
+                            </ProtectedRoute>
+
+                            <Route
+                                path="/ingredients/:id"
+                                exact={true}
+                                render={(state) => {                                    
+                                    return (
+                                        <>
+                                            {state.location.state && state.location.state.referrer && isModal && (
+                                                <>
+                                                    <HomePage />
+                                                    <IngredientDetails />
+                                                </>
+                                            )}
+                                            {!isModal && (
+                                                <>
+                                                    <IngredientDetails />
+                                                </>
+                                            )}
+                                        </>
+                                    );
+                                }}
+                            />
+
+                            <Route>
+                                <div className="text text_type_main-large mt-30" style={{ textAlign: "center", width: "100%" }}>
+                                    Вы нас с кемто перепутали, у нас нет ТАКОГО
+                                </div>
+                            </Route>
+                        </Switch>
+                    </main>
+                )}
+                {!isLoad && (
+                    <div className="loader">
+                        <div className="inner one"></div>
+                        <div className="inner two"></div>
+                        <div className="inner three"></div>
+                    </div>
+                )}
+            </Router>
         </section>
     );
 }

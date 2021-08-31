@@ -1,0 +1,8 @@
+.loginPanel{
+    display: flex;    
+    flex-direction: column;
+    align-items: center;
+    height: 478px; 
+    margin-top: 180px;     
+}
+

@@ -2,14 +2,13 @@ import React, { useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 import { Counter } from "@ya.praktikum/react-developer-burger-ui-components/dist/ui/counter";
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components/dist/ui/icons/currency-icon";
-import IngredientDetails from "../ingredient-details/ingredient-details";
 import styles from "./bi-list.module.css";
 import { ingrediensPropTypes } from "../../types";
-import Modal from "../modal/modal";
 import { useSelector, useDispatch } from "react-redux";
 import { bunMenu, mainMenu, sauceMenu } from "utils/vars";
-import { burgerIngredientReducer } from "services/redusers";
+import { useHistory } from "react-router-dom";
 import { useDrag } from "react-dnd";
+import { burgerIngredientReducer } from "services/reduсers/slices/burger-ingredient";
 
 const getCaptionElement = (title, cssCls = "") => {
     return (
@@ -21,21 +20,19 @@ const getCaptionElement = (title, cssCls = "") => {
 };
 
 const IngredienCard = ({ ingredien, count = 0, cssCls = "" }) => {
-    // const [viewDescription, setViewDescription] = React.useState(false);
-    const {currentViewIngredient} = useSelector((store) => store.burgerIngredient);
+    const history = useHistory();
     const { actions } = burgerIngredientReducer;
-    const dispatch = useDispatch()    
-
+    const dispatcn = useDispatch()
     const [{ isDrag }, dragRef] = useDrag({
         type: "ingredients",
         item: ingredien,
     });
-
-    const handleModalClose = () => {
-        dispatch(actions.setCurrentViewIngredient(null))
-    };
     const handleModalOpen = () => {
-        dispatch(actions.setCurrentViewIngredient(ingredien))
+        dispatcn(actions.setModal(true))
+        history.replace({
+            pathname: `/ingredients/${ingredien._id}`,
+            state: { referrer: history.location.pathname },
+        });
     };
     return (
         !isDrag && (
@@ -52,13 +49,6 @@ const IngredienCard = ({ ingredien, count = 0, cssCls = "" }) => {
                 <div style={{ height: 48, textAlign: "center" }} className="text text_type_main-default">
                     {ingredien.name}
                 </div>
-                {currentViewIngredient ? (
-                    <Modal onClose={handleModalClose} title="Детали ингредиента">
-                        <IngredientDetails ingredien={currentViewIngredient} />
-                    </Modal>
-                ) : (
-                    ""
-                )}
             </div>
         )
     );
