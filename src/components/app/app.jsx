@@ -16,6 +16,7 @@ import { appStart } from "services/reduсers/slices/user-Info";
 import ProfilePage from "pages/profile";
 import { ProtectedRouteAuth } from "components/protected-route/protected-route-auth";
 import IngredientDetails from "components/ingredient-details/ingredient-details";
+import OrderTape from "pages/order-tape";
 
 export default function App() {
     const dispatch = useDispatch();
@@ -59,6 +60,13 @@ export default function App() {
                             </ProtectedRoute>
                             <ProtectedRoute path="/profile/orders/:id" exact={true}>
                                 <ProfilePage />
+                            </ProtectedRoute>
+
+                            <ProtectedRoute path="/feed" exact={true}>
+                                <OrderTape />
+                            </ProtectedRoute>
+                            <ProtectedRoute path="/feed/:id" exact={true}>
+                                <OrderTape />
                             </ProtectedRoute>
 
                             <Route
