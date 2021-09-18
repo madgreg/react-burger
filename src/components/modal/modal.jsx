@@ -7,7 +7,7 @@ import PropTypes from "prop-types";
 
 const modalRoot = document.getElementById("modal-root");
 
-export default function Modal({ children, onClose, title }) {
+export default function Modal({ children, onClose, title, titleSize="text_type_main-large", marginCls="mt-30" }) {
     React.useEffect(() => {
         const keyDown = (e) => {            
             if (e.code === "Escape") {
@@ -25,7 +25,7 @@ export default function Modal({ children, onClose, title }) {
                     e.stopPropagation();
                 }}
             >
-                <div className="text text_type_main-large">
+                <div className={`text ${titleSize}`}>
                     {title}
                     <span onClick={onClose} style={{ cursor: "pointer", float: "right" }}>
                         <CloseIcon type="primary" />

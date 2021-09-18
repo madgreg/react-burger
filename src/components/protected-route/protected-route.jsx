@@ -9,7 +9,7 @@ export function ProtectedRoute({ children, ...rest }) {
   return (
     <Route
       {...rest}
-      render={({ location }) =>
+      render={rest.render? rest.render: ({ location }) =>
       isAuth ? (
           children
         ) : (

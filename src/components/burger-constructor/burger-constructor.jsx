@@ -14,6 +14,7 @@ import { useDispatch } from "react-redux";
 import PropTypes from "prop-types";
 import { ingrediensPropTypes } from "types";
 import { burgerIngredientConstructorReducer, sendOrder } from "services/reduсers/slices/constructor-Ingredients";
+import { appReducer } from "services/reduсers/slices/app";
 
 const ConstructorElementWraper = ({ ingredient, index, opt, handleClose, moveIngredient }) => {
     const ref = useRef(null);
@@ -81,8 +82,10 @@ export default function BurgerConstructor() {
     const order = useSelector((store) => store.burgerIngredientConstructor.order);
     const { actions } = burgerIngredientConstructorReducer;
     const { isAuth } = useSelector((store) => store.userInfo);
+
     const dispatch = useDispatch();
     const history = useHistory();
+   
 
     const [, dropTarget] = useDrop({
         accept: "ingredients",
@@ -95,18 +98,17 @@ export default function BurgerConstructor() {
         dispatch(actions.addIngredient(ingredien));
     };
 
-    const sendOrderHandler = () => {        
+    const sendOrderHandler = () => {
         if (order.bun.length > 0) {
-            
             if (!isAuth) {
                 history.replace({
-                        pathname: "/login",
-                        state: { referrer: history.location.pathname },
-                    });
-            }else{
-                dispatch(sendOrder(order));            
+                    pathname: "/login",
+                    state: { referrer: history.location.pathname },
+                });
+            } else {         
+                dispatch(appReducer.actions.setLoad(false));       
+                dispatch(sendOrder(order));
             }
-            
         }
     };
     const unSendOrderHandler = () => {

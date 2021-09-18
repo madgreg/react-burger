@@ -17,18 +17,18 @@ import ProfilePage from "pages/profile";
 import { ProtectedRouteAuth } from "components/protected-route/protected-route-auth";
 import IngredientDetails from "components/ingredient-details/ingredient-details";
 import OrderTape from "pages/order-tape";
+import OrdersTape from "pages/orders-tape";
 
 export default function App() {
     const dispatch = useDispatch();
-    const { isLoad } = useSelector((store) => store.appInfo);
-    const { isModal } = useSelector((store) => store.burgerIngredient);    
+    const { isLoad } = useSelector((store) => store.appInfo);    
 
     useEffect(() => {
         dispatch(loadBurgerIngredient());
-        dispatch(appStart());                
+        dispatch(appStart());
     }, [dispatch]);
 
-    useEffect(()=>{},[isLoad])
+    useEffect(() => {}, [isLoad]);
 
     return (
         <section className={styles.app}>
@@ -55,33 +55,72 @@ export default function App() {
                             <ProtectedRoute path="/profile" exact={true}>
                                 <ProfilePage />
                             </ProtectedRoute>
+
                             <ProtectedRoute path="/profile/orders" exact={true}>
                                 <ProfilePage />
                             </ProtectedRoute>
-                            <ProtectedRoute path="/profile/orders/:id" exact={true}>
-                                <ProfilePage />
-                            </ProtectedRoute>
+                            <ProtectedRoute
+                                path="/profile/orders/:id"
+                                exact={true}
+                                render={(state) => {
+                                    console.log(state);
+                                    return (
+                                        <>
+                                            {state.location.state && state.location.state.modal && state.history.action === "PUSH" && (
+                                                <>
+                                                    <ProfilePage />
+                                                    <OrderTape isModal={true} />
+                                                </>
+                                            )}
+                                            {state.history.action !== "PUSH" && (
+                                                <>
+                                                    <OrderTape />
+                                                </>
+                                            )}
+                                        </>
+                                    );
+                                }}
+                            ></ProtectedRoute>
 
-                            <ProtectedRoute path="/feed" exact={true}>
-                                <OrderTape />
-                            </ProtectedRoute>
-                            <ProtectedRoute path="/feed/:id" exact={true}>
-                                <OrderTape />
-                            </ProtectedRoute>
+                            <Route path="/feed" exact={true}>
+                                <OrdersTape />
+                            </Route>
+                            <Route
+                                path="/feed/:id"
+                                exact={true}
+                                render={(state) => {
+                                    console.log(state.history.action);
+                                    return (
+                                        <>
+                                            {state.location.state && state.location.state.modal && state.history.action === "PUSH" && (
+                                                <>
+                                                    <OrdersTape />
+                                                    <OrderTape isModal={true} />
+                                                </>
+                                            )}
+                                            {state.history.action !== "PUSH" && (
+                                                <>
+                                                    <OrderTape />
+                                                </>
+                                            )}
+                                        </>
+                                    );
+                                }}
+                            ></Route>
 
                             <Route
                                 path="/ingredients/:id"
                                 exact={true}
-                                render={(state) => {                                    
+                                render={(state) => {
                                     return (
                                         <>
-                                            {state.location.state && state.location.state.referrer && isModal && (
+                                            {state.location.state && state.location.state.modal && state.history.action === "PUSH" &&  (
                                                 <>
                                                     <HomePage />
-                                                    <IngredientDetails />
+                                                    <IngredientDetails  isModal={true}/>
                                                 </>
                                             )}
-                                            {!isModal && (
+                                            {state.history.action !== "PUSH" &&(
                                                 <>
                                                     <IngredientDetails />
                                                 </>

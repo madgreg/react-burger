@@ -22,7 +22,11 @@ export default function AppHeader() {
                         </HeaderButton>
                     </Link>
                     <Link to="/feed">
-                        <HeaderButton iconName="ListIcon" iconType="secondary">
+                        <HeaderButton
+                            iconName="ListIcon"
+                            iconType={activePage === "orders_tape" ? "primary" : "secondary"}
+                            inActive={activePage === "orders_tape" ? 0 : 1}
+                        >
                             Лента заказов
                         </HeaderButton>
                     </Link>

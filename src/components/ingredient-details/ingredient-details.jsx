@@ -16,32 +16,34 @@ const getStatisticItem = (title, value) => {
     );
 };
 
-export default function IngredientDetails() {
+export default function IngredientDetails({isModal=false}) {
     const params = useParams();
     const location = useLocation();
     const history = useHistory()
     const ingredien = useSelector((store) => store.burgerIngredient.currentViewIngredient);
-    const { isModal } = useSelector((store) => store.burgerIngredient);
+    
     const { actions } = burgerIngredientReducer;
     const dispatch = useDispatch();
     
 
     useEffect(() => {
         dispatch(actions.setCurrentViewIngredient(params.id));
-        // return history.replace({
-        //     state:  undefined
-        // });
     }, [params.id,actions,dispatch]);
 
     const handleModalClose = () => {
         dispatch(actions.setCurrentViewIngredient(null));
-        dispatch(actions.setModal(false))
-        if(location.state){
-            history.replace({
-                pathname:  location.state.referrer,
-                state:  undefined
-            });
-        }
+        // dispatch(actions.setModal(false))
+
+        history.replace({
+            pathname: '/',
+        });
+
+        // if(location.state){
+        //     history.replace({
+        //         pathname:  location.state.referrer,
+        //         state:  undefined
+        //     });
+        // }
     };
 
     return (

@@ -6,15 +6,9 @@ import { Provider } from "react-redux";
 
 import "./index.css";
 import reportWebVitals from "./reportWebVitals";
+import { store } from "services/store.js";
 
-import { configureStore } from "@reduxjs/toolkit";
-import {rootReducer} from "./services/reduсers/root-reduser";
 
-const store = configureStore({
-    reducer: rootReducer,
-    middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
-    devTools: process.env.NODE_ENV !== "production",
-});
 
 ReactDOM.render(
     <React.StrictMode>

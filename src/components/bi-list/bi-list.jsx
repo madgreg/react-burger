@@ -6,9 +6,9 @@ import styles from "./bi-list.module.css";
 import { ingrediensPropTypes } from "../../types";
 import { useSelector, useDispatch } from "react-redux";
 import { bunMenu, mainMenu, sauceMenu } from "utils/vars";
-import { useHistory } from "react-router-dom";
 import { useDrag } from "react-dnd";
 import { burgerIngredientReducer } from "services/reduсers/slices/burger-ingredient";
+import { Link } from "react-router-dom";
 
 const getCaptionElement = (title, cssCls = "") => {
     return (
@@ -19,33 +19,25 @@ const getCaptionElement = (title, cssCls = "") => {
     );
 };
 
-const IngredienCard = ({ ingredien, count = 0, cssCls = "" }) => {
-    const history = useHistory();
-    const { actions } = burgerIngredientReducer;
-    const dispatcn = useDispatch()
+const IngredienCard = ({ ingredien, count = 0, cssCls = "" }) => {    
     const [{ isDrag }, dragRef] = useDrag({
         type: "ingredients",
         item: ingredien,
     });
-    const handleModalOpen = () => {
-        dispatcn(actions.setModal(true))
-        history.replace({
-            pathname: `/ingredients/${ingredien._id}`,
-            state: { referrer: history.location.pathname },
-        });
-    };
+    
     return (
         !isDrag && (
             <div ref={dragRef} className={styles.card + " " + cssCls}>
                 {count > 0 ? <Counter count={count} size="default" /> : <></>}
 
-                <div onClick={handleModalOpen}>
+                
+                <Link  to={{ pathname: `/ingredients/${ingredien._id}`, state: { modal: true } }}>
                     <img src={ingredien.image} alt={ingredien.name} />
                     <div className={["text text_type_digits-default pt-2 pb-2", styles.price].join(" ")}>
                         <span className="mr-2">{ingredien.price}</span>
                         <CurrencyIcon type="primary" />
                     </div>
-                </div>
+                </Link>
                 <div style={{ height: 48, textAlign: "center" }} className="text text_type_main-default">
                     {ingredien.name}
                 </div>

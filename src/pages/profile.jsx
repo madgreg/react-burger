@@ -5,6 +5,9 @@ import styles from "./profile.module.css";
 import { Button, Input } from "@ya.praktikum/react-developer-burger-ui-components";
 import { useHistory, Link } from "react-router-dom";
 import { logout, updateUserInfo } from "services/reduсers/slices/user-Info";
+import { WS_CONNECTION_CLOSE_AUTH, WS_CONNECTION_START_AUTH } from "services/reduсers/actions";
+import { wsUrlProfile } from "utils/vars";
+import { OrdersList } from "components/orders-list/orders-list";
 
 const ProfilePage = () => {
     const history = useHistory();
@@ -12,6 +15,11 @@ const ProfilePage = () => {
     const userInfo = useSelector((store) => store.userInfo);
     const [form, setValue] = useState({ name: userInfo.name, email: userInfo.email, password: "" });
     const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch({ type: WS_CONNECTION_START_AUTH, payload: wsUrlProfile + userInfo.accessToken });
+        return () => dispatch({ type: WS_CONNECTION_CLOSE_AUTH });
+    }, [dispatch, userInfo.accessToken]);
 
     const onChange = (e) => {
         setValue({ ...form, [e.target.name]: e.target.value });
@@ -76,7 +84,7 @@ const ProfilePage = () => {
                     </Button>
                 </form>
             )}
-            {urlArr[2] === "orders" && <div className="text text_type_main-medium">Данный функционал в разработке</div>}
+            {urlArr[2] === "orders" && <div style={{ width: 844 }}><OrdersList pathname='profile/orders'/></div>}
         </section>
     );
 };
