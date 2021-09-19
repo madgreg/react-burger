@@ -19,6 +19,8 @@ import IngredientDetails from "components/ingredient-details/ingredient-details"
 import OrderTape from "pages/order-tape";
 import OrdersTape from "pages/orders-tape";
 
+console.log(React.version)
+
 export default function App() {
     const dispatch = useDispatch();
     const { isLoad } = useSelector((store) => store.appInfo);    

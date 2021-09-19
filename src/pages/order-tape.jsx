@@ -14,7 +14,7 @@ const getBody = (curentOrder, listIngridient, orderSum) => {
     return (
         <>
             <div className="text text_type_main-medium pb-3">{curentOrder[0].name}</div>
-            <div className="text text_type_main-small pb-15" style={{ color: orderState[curentOrder[0].status][1]}}>
+            <div className="text text_type_main-small pb-15" style={{ color: orderState[curentOrder[0].status][1] }}>
                 {orderState[curentOrder[0].status][0]}
             </div>
             <div className="text text_type_main-medium pb-6">Состав:</div>
@@ -22,30 +22,32 @@ const getBody = (curentOrder, listIngridient, orderSum) => {
                 {Object.keys(listIngridient).map((ingredientId, idx) => {
                     const ingridient = listIngridient[ingredientId];
                     return (
-                        <li key={ingredientId} style={{ display: "flex", alignItems: "center" }} className="pb-4">
-                            <div className="pr-4">
-                                <img
-                                    src={ingridient.image}
-                                    alt=""
-                                    style={{
-                                        width: 64,
-                                        height: 64,
-                                        background: "#131316",
-                                        borderRadius: 100,
-                                        border: "1px solid #7231ed",
-                                    }}
-                                />
-                            </div>
-                            <div style={{ display: "flex", justifyContent: "space-between", width: "100%" }}>
-                                <div className="text text_type_main-small pr-4">{ingridient.name} </div>
-                                <div style={{ display: "flex" }}>
-                                    <div className="text text_type_digits-default pr-2">
-                                        {ingridient.count} x {ingridient.price}
-                                    </div>
-                                    <CurrencyIcon type="primary" />
+                        ingridient && (
+                            <li key={ingredientId} style={{ display: "flex", alignItems: "center" }} className="pb-4">
+                                <div className="pr-4">
+                                    <img
+                                        src={ingridient.image}
+                                        alt=""
+                                        style={{
+                                            width: 64,
+                                            height: 64,
+                                            background: "#131316",
+                                            borderRadius: 100,
+                                            border: "1px solid #7231ed",
+                                        }}
+                                    />
                                 </div>
-                            </div>
-                        </li>
+                                <div style={{ display: "flex", justifyContent: "space-between", width: "100%" }}>
+                                    <div className="text text_type_main-small pr-4">{ingridient.name} </div>
+                                    <div style={{ display: "flex" }}>
+                                        <div className="text text_type_digits-default pr-2">
+                                            {ingridient.count} x {ingridient.price}
+                                        </div>
+                                        <CurrencyIcon type="primary" />
+                                    </div>
+                                </div>
+                            </li>
+                        )
                     );
                 })}
             </ul>
@@ -68,7 +70,7 @@ const OrderTape = ({ isModal = false }) => {
     const [orderSum, setOrderSum] = useState(0);
     const burgerIngredients = useSelector((store) => store.burgerIngredient.burgerIngredients);
     const history = useHistory();
-    
+
     useEffect(() => {
         if (!isModal) {
             dispatch(appReducer.actions.setActivePage("orders_tape"));
@@ -85,11 +87,13 @@ const OrderTape = ({ isModal = false }) => {
             let lst = {};
             curentOrder[0].ingredients.forEach((ingredientId) => {
                 const ingridient = burgerIngredients.filter((x) => x._id === ingredientId)[0];
-                sumOrd = sumOrd + ingridient.price;
-                if (!lst[ingredientId]) {
-                    lst[ingredientId] = { ...ingridient, count: 1 };
-                } else {
-                    lst[ingredientId].count = lst[ingredientId].count + 1;
+                if (ingridient) {
+                    sumOrd = sumOrd + ingridient.price;
+                    if (!lst[ingredientId]) {
+                        lst[ingredientId] = { ...ingridient, count: 1 };
+                    } else {
+                        lst[ingredientId].count = lst[ingredientId].count + 1;
+                    }
                 }
             });
             setOrderSum(sumOrd);
@@ -97,11 +101,9 @@ const OrderTape = ({ isModal = false }) => {
         }
     }, [burgerIngredients, curentOrder]);
 
-    
-
-    const closeModal = () => {        
+    const closeModal = () => {
         history.replace({
-            pathname: history.location.pathname.replace(params.id, ''),
+            pathname: history.location.pathname.replace(params.id, ""),
         });
     };
 

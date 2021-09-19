@@ -43,7 +43,7 @@ export const burgerIngredientReducer = createSlice({
         },
         setCurrentViewIngredient: (state, action) => {            
             const ingridient = state.burgerIngredients.filter(x=>x._id===action.payload)[0]            
-            state.currentViewIngredient = ingridient;
+            state.currentViewIngredient = ingridient ? ingridient: null;
         },
         setTab: (state, action) => {
             state.currentTab = action.payload;

@@ -12,13 +12,15 @@ export const OrdersList = ({ pathname = "feed" }) => {
     return (
         <div style={{ height: 916, overflowY: "auto" }}>
             <div className="pr-2" style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-                {orders &&
+                {orders && burgerIngredients &&
                     orders.map((order) => {                        
                         
-                        let orderSum = 0;
+                        let orderSum = 0;                        
                         order.ingredients.forEach((ingredient) => {
                             const ingridient = burgerIngredients.filter((x) => x._id === ingredient)[0];
-                            orderSum += ingridient.price;
+                            if(ingridient){
+                                orderSum += ingridient.price;
+                            }                            
                         });                        
                            
                         return (
@@ -41,7 +43,7 @@ export const OrdersList = ({ pathname = "feed" }) => {
                                         <div>
                                             {order.ingredients.slice(0, 5).map((ingredientId, idx) => {
                                                 const ingridient = burgerIngredients.filter((x) => x._id === ingredientId)[0];
-                                                return (
+                                                return (ingridient &&
                                                     <img
                                                         // src={ingridient.image_mobile}
                                                         alt=""
