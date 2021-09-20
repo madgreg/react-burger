@@ -100,7 +100,7 @@ export default function BIList() {
             rootMargin: "0px",
             threshold: 1,
         };
-        let callback = function (entries, observer) {
+        let callback = function (entries, observer) {            
             dispatch(actions.setTab(entries[0].target.classList[2]));
         };
         let observer = new IntersectionObserver(callback, options);

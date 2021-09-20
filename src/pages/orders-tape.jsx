@@ -67,7 +67,7 @@ const OrdersTape = () => {
                         <div className="pr-9" style={{ width: 280 }}>
                             <div className="text text_type_main-medium pb-6">Готовы: </div>
                             {doneOrder.map((block, idx) => {
-                                return (<>
+                                return (
                                     <div key={`doneOrder${idx}`} className={styles.status_column}>
                                         {block.map((itm) => {
                                             return (
@@ -77,14 +77,14 @@ const OrdersTape = () => {
                                             );
                                         })}
                                     </div>
-                                    </>
+                                    
                                 );                               
                             })}
                         </div>
                         <div style={{ width: 280 }}>
                             <div className="text text_type_main-medium pb-6">В работе: </div>
                             {pendingOrder.map((block, idx) => {
-                                return (<>
+                                return (
                                     <div key= {`pendingOrder${idx}`} className={styles.status_column}>
                                         {block.map((itm) => {
                                             return (
@@ -94,7 +94,7 @@ const OrdersTape = () => {
                                             );
                                         })}
                                     </div>
-                                    </>
+                                    
                                 );                               
                             })}                            
                         </div>

@@ -4,10 +4,11 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { getDaysAfter } from "utils/funcs";
 import { orderState } from "utils/vars";
+import { selectBurgerIngredients } from "services/reduсers/slices/burger-ingredient";
 
 export const OrdersList = ({ pathname = "feed" }) => {
     const { orders } = useSelector((store) => store.ordersTape.orderList);
-    const burgerIngredients = useSelector((store) => store.burgerIngredient.burgerIngredients);
+    const burgerIngredients = useSelector(selectBurgerIngredients);
     
     return (
         <div style={{ height: 916, overflowY: "auto" }}>
