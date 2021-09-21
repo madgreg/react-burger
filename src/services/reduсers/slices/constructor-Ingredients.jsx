@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { appReducer } from "./app";
 
 // constructorIngredients API
 
@@ -11,12 +12,15 @@ const initState = {
     },
 };
 
-export const sendOrder = (order) => (dispatch) => {
+export const sendOrder = (order) => (dispatch, getState) => {
+    
+    const state = getState()
     const URL = "https://norma.nomoreparties.space/api/orders";
     fetch(URL, {
         method: "POST",
         headers: {
             "Content-Type": "application/json;charset=utf-8",
+            Authorization: "Bearer " + state.userInfo.accessToken,
         },
         body: JSON.stringify({ ingredients: order.bun.concat(order.ingredients).map((x) => x._id) }),
     })
@@ -26,10 +30,11 @@ export const sendOrder = (order) => (dispatch) => {
             }
             return response;
         })
-        .then((response) => {
+        .then((response) => {            
             return response.json();
         })
         .then((data) => {
+            dispatch(appReducer.actions.setLoad(true));
             dispatch(burgerIngredientConstructorReducer.actions.setOrderId(data.order.number));
         })
         .catch((error) => {

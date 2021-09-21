@@ -2,10 +2,9 @@ import { createSlice } from "@reduxjs/toolkit";
 import { bunMenu } from "utils/vars";
 import { appReducer } from "./app";
 
-
 // burgerIngredient API
 
-const initBurgerIngredientState = {
+export const initBurgerIngredientState = {
     isModal: false,
     currentTab: bunMenu,
     burgerIngredients: [],
@@ -26,7 +25,7 @@ export const loadBurgerIngredient = () => (dispatch, getState) => {
         })
         .then((data) => {
             dispatch(burgerIngredientReducer.actions.setData(data.data));
-            dispatch(appReducer.actions.setTmpFg());            
+            dispatch(appReducer.actions.setTmpFg());
             // dispatch(appReducer.actions.setLoad(true));
         })
         .catch((error) => {
@@ -41,9 +40,9 @@ export const burgerIngredientReducer = createSlice({
         setModal: (state, action) => {
             state.isModal = action.payload;
         },
-        setCurrentViewIngredient: (state, action) => {            
-            const ingridient = state.burgerIngredients.filter(x=>x._id===action.payload)[0]            
-            state.currentViewIngredient = ingridient;
+        setCurrentViewIngredient: (state, action) => {
+            const ingridient = state.burgerIngredients.filter((x) => x._id === action.payload)[0];
+            state.currentViewIngredient = ingridient ? ingridient : null;
         },
         setTab: (state, action) => {
             state.currentTab = action.payload;
@@ -53,3 +52,8 @@ export const burgerIngredientReducer = createSlice({
         },
     },
 });
+
+export const selectIsModal = (state) => state.burgerIngredient.isModal;
+export const selectCurrentTab = (state) => state.burgerIngredient.currentTab;
+export const selectBurgerIngredients = (state) => state.burgerIngredient.burgerIngredients;
+

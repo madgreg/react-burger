@@ -20,7 +20,7 @@ export function setCookie(name, value, props) {
         props.expires = exp.toUTCString();
     }
     value = encodeURIComponent(value);
-    let updatedCookie = name + "=" + value + ';path=/';
+    let updatedCookie = name + "=" + value + ";path=/";
     for (const propName in props) {
         updatedCookie += "; " + propName;
         const propValue = props[propName];
@@ -35,3 +35,24 @@ export function setCookie(name, value, props) {
 export function deleteCookie(name) {
     setCookie(name, null, { expires: -1 });
 }
+
+export const getDaysAfter = (dt) => {
+    const start = new Date(dt);
+    let start_ = (start + "").split(" ");
+    const end = Date.now();
+    const aday__ = Math.trunc((end - start) / 1000 / 86400);
+    let aday = "Сегодня";
+    if (aday__ === 1) {
+        aday = "Вчера";
+    } else {
+        if (aday__ > 1) {
+            aday = `${aday__} дня назад`;
+        }
+    }
+
+    const h = start.getHours();
+    let m = start.getMinutes();
+    m = m > 9 ? m : "0" + m;
+
+    return `${aday}, ${h}:${m} i-${start_[5]} `;
+};
