@@ -1,0 +1,35 @@
+.main{
+    height: 916px;
+    width: 600px;
+    
+    display: flex;
+    flex-direction: column;
+}
+
+
+
+
+.unbloked_list::-webkit-scrollbar {
+    width: 8px;
+}
+
+.unbloked_list::-webkit-scrollbar-track {
+    background: #8585ad;
+}
+
+.unbloked_list::-webkit-scrollbar-thumb {
+    background-color: #2f2f37;
+    border-radius: 1px;
+}
+
+.price {    
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+
+.element{
+    display: flex;
+    align-items: center;
+}

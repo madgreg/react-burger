@@ -1,0 +1,26 @@
+.app_head {
+    background-color: #1c1c21;
+}
+
+.head_nav {
+    width: 1280px;
+    height: 88px;
+    margin: auto;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.nav_block {    
+    flex: auto;
+    display: flex;
+}
+
+.last {
+    justify-content: flex-end;
+}
+
+.logo {
+    width: 330px;
+}
+
