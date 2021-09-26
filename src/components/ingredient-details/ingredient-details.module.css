@@ -1,0 +1,11 @@
+.box{
+    margin: auto; 
+    width: 520px;
+    display:flex;     
+    flex-direction: column;
+    text-align: center;
+}
+
+.textAlignCenter{
+    text-align: center 
+}

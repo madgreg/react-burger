@@ -1,0 +1,11 @@
+
+.main_content{
+    width: 1240px;    
+    height: calc(100vh-88);
+    margin: auto;
+    display: flex;    
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
