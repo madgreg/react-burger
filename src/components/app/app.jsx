@@ -27,6 +27,7 @@ export default function App() {
 
     useEffect(() => {
         dispatch(loadBurgerIngredient());
+        // dispatch({type: "burgerIngredient/loadBurgerIngredient"})
         dispatch(appStart());
     }, [dispatch]);
 

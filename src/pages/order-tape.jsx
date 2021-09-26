@@ -9,6 +9,7 @@ import { useParams, useHistory } from "react-router-dom";
 import { getOrder } from "services/reduсers/slices/orders-tape";
 import { getDaysAfter } from "utils/funcs";
 import { orderState } from "utils/vars";
+import { selectBurgerIngredients } from "services/reduсers/slices/burger-ingredient";
 
 const getBody = (curentOrder, listIngridient, orderSum) => {
     return (
@@ -68,7 +69,7 @@ const OrderTape = ({ isModal = false }) => {
     const { curentOrder } = useSelector((store) => store.ordersTape);
     const [listIngridient, setListIngridient] = useState({});
     const [orderSum, setOrderSum] = useState(0);
-    const burgerIngredients = useSelector((store) => store.burgerIngredient.burgerIngredients);
+    const burgerIngredients = useSelector(selectBurgerIngredients);
     const history = useHistory();
 
     useEffect(() => {
@@ -119,16 +120,14 @@ const OrderTape = ({ isModal = false }) => {
                 </Modal>
             )}
             {!isModal && curentOrder && (
-                <>
-                    <div style={{ margin: "auto" }}>
-                        <div style={{ width: 620, height: 640 }} className="mt-30">
-                            <div className="text text_type_digits-default pb-10" style={{ textAlign: "center" }}>
-                                #{curentOrder[0].number}
-                            </div>
-                            {getBody(curentOrder, listIngridient, orderSum)}
+                <div style={{ margin: "auto" }}>
+                    <div style={{ width: 620, height: 640 }} className="mt-30">
+                        <div className="text text_type_digits-default pb-10" style={{ textAlign: "center" }}>
+                            #{curentOrder[0].number}
                         </div>
+                        {getBody(curentOrder, listIngridient, orderSum)}
                     </div>
-                </>
+                </div>
             )}
         </>
     );

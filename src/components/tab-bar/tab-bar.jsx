@@ -3,12 +3,12 @@ import styles from "./tab-bar.module.css";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components/dist/ui/tab";
 import { bunMenu, mainMenu, sauceMenu } from "utils/vars";
 import { useSelector, useDispatch } from "react-redux";
-import { burgerIngredientReducer } from "services/reduсers/slices/burger-ingredient";
+import { burgerIngredientReducer, selectCurrentTab } from "services/reduсers/slices/burger-ingredient";
 
 
 export default function TabBar() {
     const dispatch = useDispatch();
-    const { currentTab } = useSelector((store) => store.burgerIngredient);
+    const currentTab = useSelector(selectCurrentTab);
     const { actions } = burgerIngredientReducer;
     const [current, setCurrent] = React.useState(currentTab);
 

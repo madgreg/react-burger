@@ -65,7 +65,7 @@ export const getUserInfoRequest = async (token) =>
         return response.json();
     });
 
-export const loginRequest = async (form) => {
+export const loginRequest = async (form) => {    
     return await fetch("https://norma.nomoreparties.space/api/auth/login", {
         method: "POST",
         mode: "cors",
@@ -95,7 +95,7 @@ export const forgotPasswordRequest = async (form) =>
     });
 
 export const resetPasswordRequest = async (form) =>
-    await fetch(" https://norma.nomoreparties.space/api/password-reset/reset", {
+    await fetch("https://norma.nomoreparties.space/api/password-reset/reset", {
         method: "POST",
         mode: "cors",
         cache: "no-cache",
@@ -141,3 +141,25 @@ export const updateUserInfoRequest = async (form, token) => {
     });
 };
 
+export const loadBurgerIngredientRequest = async () => {    
+    const response = await fetch("https://norma.nomoreparties.space/api/ingredients");
+    if (response.status >= 400 && response.status < 600) {
+        throw new Error("Bad response from server");
+    }
+    
+    return response;
+};
+
+export const getOrderRequest = async (order) => {    
+    const response = await fetch("https://norma.nomoreparties.space/api/orders/" + order, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json;charset=utf-8",
+        },
+    });
+    if (response.status >= 400 && response.status < 600) {
+        throw new Error("Bad response from server");
+    }
+
+    return response;
+};

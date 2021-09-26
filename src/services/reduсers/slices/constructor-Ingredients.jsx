@@ -3,7 +3,7 @@ import { appReducer } from "./app";
 
 // constructorIngredients API
 
-const initState = {
+export const burgerIngredientInitState = {
     orderSum: 0,
     orderId: null,
     order: {
@@ -44,18 +44,19 @@ export const sendOrder = (order) => (dispatch, getState) => {
 
 export const burgerIngredientConstructorReducer = createSlice({
     name: "burgerIngredientConstructor",
-    initialState: initState,
+    initialState: burgerIngredientInitState,
     reducers: {
         resetOrder: (state) => {
-            state.orderSum = initState.orderSum;
-            state.orderId = initState.orderId;
-            state.order = initState.order;
+            state.orderSum = burgerIngredientInitState.orderSum;
+            state.orderId = burgerIngredientInitState.orderId;
+            state.order = burgerIngredientInitState.order;
+            // state = burgerIngredientInitState
         },
         setOrderId: (state, action) => {
             state.orderId = action.payload;
         },
         resetSummOrder: (state) => {
-            state.orderSum = initState.orderSum;
+            state.orderSum = burgerIngredientInitState.orderSum;
         },
         setSummOrder: (state) => {
             const reducer = (accumulator, currentValue) => accumulator + currentValue;
@@ -84,3 +85,7 @@ export const burgerIngredientConstructorReducer = createSlice({
         },
     },
 });
+
+export const selectOrderSum = (state) => state.burgerIngredientConstructor.orderSum;
+export const selectOrderId = (state) => state.burgerIngredientConstructor.orderId;
+export const selectOrder = (state) => state.burgerIngredientConstructor.order;
