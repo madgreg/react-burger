@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { bunMenu } from "utils/vars";
+import { loadBurgerIngredientRequest } from "../api";
 import { appReducer } from "./app";
 
 // burgerIngredient API
@@ -11,26 +12,17 @@ export const initBurgerIngredientState = {
     currentViewIngredient: null,
 };
 
-export const loadBurgerIngredient = () => (dispatch, getState) => {
-    const URL = "https://norma.nomoreparties.space/api/ingredients";
-    fetch(URL)
-        .then((response) => {
-            if (response.status >= 400 && response.status < 600) {
-                throw new Error("Bad response from server");
-            }
-            return response;
-        })
-        .then((response) => {
-            return response.json();
-        })
-        .then((data) => {
+export const loadBurgerIngredient = () => async (dispatch, getState) => {    
+    try {
+        const response = await loadBurgerIngredientRequest();
+        const data = await response.json();        
+        if (data.success) {            
             dispatch(burgerIngredientReducer.actions.setData(data.data));
             dispatch(appReducer.actions.setTmpFg());
-            // dispatch(appReducer.actions.setLoad(true));
-        })
-        .catch((error) => {
-            console.log(error);
-        });
+        }
+    } catch (error) {
+        console.log('=error:',error);
+    }
 };
 
 export const burgerIngredientReducer = createSlice({
@@ -56,4 +48,4 @@ export const burgerIngredientReducer = createSlice({
 export const selectIsModal = (state) => state.burgerIngredient.isModal;
 export const selectCurrentTab = (state) => state.burgerIngredient.currentTab;
 export const selectBurgerIngredients = (state) => state.burgerIngredient.burgerIngredients;
-
+export const selectCurrentViewIngredient = (state) => state.burgerIngredient.currentViewIngredient;

@@ -17,7 +17,7 @@ const subArrays = (array, size) => {
 
 const OrdersTape = () => {
     const dispatch = useDispatch();
-    const { orders, total, totalToday } = useSelector((store) => store.ordersTape.orderList);    
+    const { orders, total, totalToday } = useSelector((store) => store.ordersTape.orderList);
     const [doneOrder, setDoneOrder] = useState([]);
     const [pendingOrder, setPendingOrder] = useState([]);
 
@@ -37,11 +37,9 @@ const OrdersTape = () => {
 
             doneOrder_ = subArrays(doneOrder_, 10);
             setDoneOrder(doneOrder_);
-            
 
             pendingOrder_ = subArrays(pendingOrder_, 10);
-            setPendingOrder(pendingOrder_)        
-            
+            setPendingOrder(pendingOrder_);
         }
     }, [orders]);
 
@@ -59,7 +57,7 @@ const OrdersTape = () => {
             <div style={{ display: "flex" }}>
                 <div style={{ height: 916, overflowY: "auto" }}>
                     <div className="pr-2" style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-                        <OrdersList/>
+                        <OrdersList />
                     </div>
                 </div>
                 <div className="ml-15" style={{ width: 580 }}>
@@ -69,34 +67,28 @@ const OrdersTape = () => {
                             {doneOrder.map((block, idx) => {
                                 return (
                                     <div key={`doneOrder${idx}`} className={styles.status_column}>
-                                        {block.map((itm) => {
+                                        {block.map((itm, idx) => {
                                             return (
-                                                <div className="text text_type_digits-default pb-2" style={{ color: "#00CCCC" }}>
+                                                <div key = {idx} className="text text_type_digits-default pb-2" style={{ color: "#00CCCC" }}>
                                                     {itm}
                                                 </div>
                                             );
                                         })}
                                     </div>
-                                    
-                                );                               
+                                );
                             })}
                         </div>
                         <div style={{ width: 280 }}>
                             <div className="text text_type_main-medium pb-6">В работе: </div>
                             {pendingOrder.map((block, idx) => {
                                 return (
-                                    <div key= {`pendingOrder${idx}`} className={styles.status_column}>
-                                        {block.map((itm) => {
-                                            return (
-                                                <div  className="text text_type_digits-default pb-2">
-                                                    {itm}
-                                                </div>
-                                            );
+                                    <div key={`pendingOrder${idx}`} className={styles.status_column}>
+                                        {block.map((itm, idx) => {
+                                            return <div  key = {idx} className="text text_type_digits-default pb-2">{itm}</div>;
                                         })}
                                     </div>
-                                    
-                                );                               
-                            })}                            
+                                );
+                            })}
                         </div>
                     </div>
                     <div className="text text_type_main-medium">Выполнено за все время: </div>

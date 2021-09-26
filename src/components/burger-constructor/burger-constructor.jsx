@@ -170,8 +170,8 @@ export default function BurgerConstructor() {
     return (
         <section className={[styles.main, "pl-4"].join(" ")}>
             <div className="mt-25">{bloked[0]}</div>
-            <section style={{ display: "contents" }} ref={dropTarget}>
-                <div style={{ overflowY: "auto", height: 480 }}>{unbloked}</div>
+            <section style={{ display: "contents" }} ref={dropTarget} >
+                <div style={{ overflowY: "auto", height: 480 }} test-class='dnd-end'>{unbloked}</div>
             </section>
             <div className="mt-4">{bloked[1]}</div>
             <div className={["mt-10", styles.price].join(" ")}>

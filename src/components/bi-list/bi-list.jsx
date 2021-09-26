@@ -27,7 +27,7 @@ const IngredienCard = ({ ingredien, count = 0, cssCls = "" }) => {
     
     return (
         !isDrag && (
-            <div ref={dragRef} className={styles.card + " " + cssCls}>
+            <div ref={dragRef} test-class={`dnd-${ingredien.type}`} className={styles.card + " " + cssCls}>
                 {count > 0 ? <Counter count={count} size="default" /> : <></>}
 
                 
