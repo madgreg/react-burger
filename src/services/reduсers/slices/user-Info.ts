@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import thunk from "redux-thunk";
 import { initStateUserInfoReducerType, logInResponse, refreshTokenResponse, updateUserInforArg, updateUserInfoResponse, userInfoArg } from "types";
-import { deleteCookie, getCookie, setCookie } from "utils/funcs";
+import { deleteCookie, setCookie } from "utils/funcs";
 import {
     forgotPasswordRequest,
     getUserInfoRequest,
@@ -15,12 +14,13 @@ import {
 import { appReducer } from "./app";
 // import { appReducer } from "./app";
 
-export const getUserInfo = createAsyncThunk("userInfoReducer/getUserInfo", async (accessToken,thunkApi) => {
+export const getUserInfo = createAsyncThunk("userInfoReducer/getUserInfo", async (tmp=undefined,thunkApi) => {
     try {
         const store:any = thunkApi.getState()
         const response = await getUserInfoRequest(store.userInfo.accessToken);
         const data = await response.json();
-        if (data.success) {            
+        if (data.success) {  
+            thunkApi.dispatch(appReducer.actions.setTmpFg())          
             return data;
         } else {
             console.log(data.message);
@@ -195,15 +195,15 @@ export const userInfoReducer = createSlice({
                 state.name = action.payload.user.name;
                 state.email = action.payload.user.email;
             })
-            .addCase(appStart.fulfilled, (state, action: PayloadAction<refreshTokenResponse>) => {                
+            .addCase(appStart.fulfilled, (state, action: PayloadAction<refreshTokenResponse>) => {
+                
                 setCookie("refreshToken", action.payload.refreshToken);
                 state.accessToken = action.payload.accessToken.split(" ")[1];
-            }).addCase(getUserInfo.fulfilled, (state, action: PayloadAction<updateUserInfoResponse>) => {
-                
+            }).addCase(getUserInfo.fulfilled, (state, action: PayloadAction<updateUserInfoResponse>) => {                
                 state.name = action.payload.user.name;
                 state.email = action.payload.user.email;
                 state.isAuth = true;
-                state.isLoad = false;
+                // dispatch(appReducer.actions.setTmpFg());
             });
     },
 });
