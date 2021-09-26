@@ -18,5 +18,7 @@ describe("userOrdersReducer", () => {
         const nextState = userOrdersReducer.reducer(userOrdersReducerInitState, actions.setCurentOrder({ name: "test" }));
         const rootState = { userOrders: nextState };
         expect(selectCurentOrder(rootState)).toEqual(selectCurentOrder(testValue1));
+
+        
     });
 });
