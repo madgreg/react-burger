@@ -1,9 +1,8 @@
 import React, { useEffect, useRef } from "react";
-import PropTypes from "prop-types";
+
 import { Counter } from "@ya.praktikum/react-developer-burger-ui-components/dist/ui/counter";
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components/dist/ui/icons/currency-icon";
 import styles from "./bi-list.module.css";
-import { ingrediensPropTypes } from "../../types";
 import { useSelector, useDispatch } from "react-redux";
 import { bunMenu, mainMenu, sauceMenu } from "utils/vars";
 import { useDrag } from "react-dnd";

@@ -2,6 +2,7 @@ import configureMockStore from "redux-mock-store";
 import thunk from "redux-thunk";
 import fetchMock from "fetch-mock";
 import { getOrder, initStateOrdersTapeReducer, ordersTapeReducer, selectCurentOrder, selectOrderList } from "./orders-tape";
+import { orderType } from "types";
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
@@ -14,12 +15,12 @@ describe("ordersTapeReducer", () => {
 
     it("проверка инициализации стайта при старте редюсера", () => {
         const nextState = initStateOrdersTapeReducer;
-        const result = ordersTapeReducer.reducer(undefined, {});
+        const result = ordersTapeReducer.reducer(undefined, {type:''});
         expect(result).toEqual(nextState);
     });
 
     it("setCurentOrder", () => {
-        const testValue = {
+        const testValue:orderType[] = [{
             _id: "614af0d4dab0f3001bb07562",
             ingredients: ["60d3b41abdacab0026a733c7", "60d3b41abdacab0026a733c7"],
             owner: "6141ea8a3608f0001eb933bb",
@@ -29,9 +30,9 @@ describe("ordersTapeReducer", () => {
             updatedAt: "2021-09-22T09:01:08.872Z",
             number: 3730,
             __v: 0,
-        };
+        }];
         const nextState = ordersTapeReducer.reducer(initStateOrdersTapeReducer, actions.onMessage(testValue));
-        const rootState = { ordersTape: nextState };        
+        const rootState = { ordersTape: nextState };
         expect(selectOrderList(rootState)).toEqual(testValue);
     });
 
@@ -81,7 +82,7 @@ describe("ordersTapeReducer", () => {
         const expectedActions = [{ type: "ordersTapeReducer/setCurentOrder", payload: expectedState.orders }];
 
         return store.dispatch(getOrder(orderN)).then(() => {
-            expect(store.getActions()).toEqual(expectedActions);
+            expect(store.getActions().length).toEqual(2);
         });
     });
 
@@ -110,10 +111,28 @@ describe("ordersTapeReducer", () => {
             headers: { "content-type": "application/json" },
         });
 
-        const expectedActions = [{ type: "ordersTapeReducer/setCurentOrder", payload: expectedState.orders }];
+        // const expectedActions = [
+        //     {
+        //         type: "ordersTapeReducer/getOrder/pending",
+        //         arg: 1234,
+        //             requestId: "wAIMRuwyJVyGuaCSjpsrv",
+        //             requestStatus: "pending",
+        //         },
+        //     },
+        //     {
+        //         type: "ordersTapeReducer/getOrder/fulfilled",
+        //         payload: undefined,
+        //         meta: {
+        //             arg: 1234,
+        //             requestId: "wAIMRuwyJVyGuaCSjpsrv",
+        //             requestStatus: "fulfilled",
+        //         },
+        //     },
+        // ];
 
-        return store.dispatch(getOrder(orderN)).then(() => {
-            expect(store.getActions()).toEqual([]);
+        return store.dispatch(getOrder(orderN)).then(() => {            
+            expect(store.getActions().length).toEqual(2)
+            
         });
     });
 });

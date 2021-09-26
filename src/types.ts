@@ -37,8 +37,8 @@ export type initBurgerIngredientStateType = {
 };
 
 export type sendOrderArg = {
-    order: string;
-    accessToken: string;
+    order: constructorIngredientsOrder;
+    accessToken: string | null;
 };
 
 export type orderSendResponse = {
@@ -66,6 +66,8 @@ export type initStateOrdersTapeReducerType = {
     curentOrder: orderType | null;
     orderList: orderType[];
 };
+
+export type userOrdersReducerInitStateType = Omit<initStateOrdersTapeReducerType, 'orderList'>
 
 export type orderType = {
     _id: string;
@@ -119,4 +121,14 @@ export type updateUserInforArg = {
     accessToken: string;
 };
 
+export type registrationFormType = {
+    email: string; 
+    password: string; 
+    name: string; 
+} 
+
+export type resetPaswordForm = {
+    password: string;
+    token: string;
+}
 

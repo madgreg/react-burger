@@ -1,21 +1,5 @@
 import { getCookie } from "utils/funcs";
 
-export const deserializeQuery = (query, noQuestionMark = false) => {
-    const pairs = (noQuestionMark ? query : query.substring(1)).split("&");
-    const array = pairs.map((elem) => elem.split("="));
-    return Object.fromEntries(array);
-};
-
-export const serializeQuery = (queryParams) =>
-    Object.entries(queryParams).reduce((acc, [key, value], index, array) => {
-        if (typeof value === "undefined") {
-            return acc;
-        }
-        const postfix = index === array.length - 1 ? "" : "&";
-        return `${acc}${encodeURIComponent(key)}=${encodeURIComponent(value)}${postfix}`;
-    }, "?");
-
-//////
 export const registerRequest = async (form) => {
     const response =  await fetch("https://norma.nomoreparties.space/api/auth/register", {
         method: "POST",

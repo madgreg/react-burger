@@ -11,10 +11,11 @@ import { useDrag, useDrop } from "react-dnd";
 import { useHistory } from "react-router-dom";
 
 import { useDispatch } from "react-redux";
-import PropTypes from "prop-types";
+
 
 import { burgerIngredientConstructorReducer, selectBIConstructorIsLoad, sendOrder } from "services/reduсers/slices/constructor-Ingredients";
-import { appReducer } from "services/reduсers/slices/app";
+
+import { RootStore } from "services/store";
 
 const ConstructorElementWraper = ({ ingredient, index, opt, handleClose, moveIngredient }) => {
     const ref = useRef(null);
@@ -78,11 +79,11 @@ const ConstructorElementWraper = ({ ingredient, index, opt, handleClose, moveIng
 // };
 
 export default function BurgerConstructor() {
-    const { orderId, orderSum } = useSelector((store) => store.burgerIngredientConstructor);
-    const order = useSelector((store) => store.burgerIngredientConstructor.order);
+    const { orderId, orderSum } = useSelector((store:RootStore) => store.burgerIngredientConstructor);
+    const order = useSelector((store:RootStore) => store.burgerIngredientConstructor.order);
     const { actions } = burgerIngredientConstructorReducer;
     const BIConstructorIsLoad = useSelector(selectBIConstructorIsLoad);
-    const { isAuth, accessToken } = useSelector((store) => store.userInfo);
+    const { isAuth, accessToken } = useSelector((store:RootStore) => store.userInfo);
 
     const dispatch = useDispatch();
     const history = useHistory();

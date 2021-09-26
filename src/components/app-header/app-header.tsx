@@ -1,12 +1,13 @@
 import { Logo } from "@ya.praktikum/react-developer-burger-ui-components/dist/ui/logo";
-import React from "react";
+
 import HeaderButton from "../header-button/header-button";
 import { Link } from "react-router-dom";
 import styles from "./app-header.module.css";
 import { useSelector } from "react-redux";
+import { RootStore } from "services/store";
 
 export default function AppHeader() {
-    const { activePage } = useSelector((store) => store.appInfo);
+    const { activePage } = useSelector((store:RootStore) => store.appInfo);
     return (
         <div className={styles.app_head}>
             <nav className={styles.head_nav}>

@@ -95,7 +95,7 @@ export default function App() {
                                         </>
                                     );
                                 }}
-                            ></ProtectedRoute>
+                            ><></></ProtectedRoute>
 
                             <Route path="/feed" exact={true}>
                                 <OrdersTape />

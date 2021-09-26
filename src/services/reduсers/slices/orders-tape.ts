@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { getOrderOrdersTapeResponse, initStateOrdersTapeReducerType, orderType } from "types";
 import { getOrderRequest } from "../api";
 
-export const getOrder = createAsyncThunk("ordersTapeReducer/getOrder", async (order) => {
+export const getOrder = createAsyncThunk("ordersTapeReducer/getOrder", async (order:number) => {
     try {
         const response = await getOrderRequest(order);
         const data = await response.json();
@@ -27,7 +27,7 @@ export const ordersTapeReducer = createSlice({
             state.curentOrder = { ...action.payload };
         },
         onMessage: (state, action: PayloadAction<orderType[]>) => {
-            state.orderList = { ...action.payload };
+            state.orderList =  action.payload;
         },
     },
     extraReducers: (builder) => {

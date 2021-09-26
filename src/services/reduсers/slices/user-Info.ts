@@ -1,5 +1,14 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { initStateUserInfoReducerType, logInResponse, refreshTokenResponse, updateUserInforArg, updateUserInfoResponse, userInfoArg } from "types";
+import {
+    initStateUserInfoReducerType,
+    logInResponse,
+    refreshTokenResponse,
+    registrationFormType,
+    resetPaswordForm,
+    updateUserInforArg,
+    updateUserInfoResponse,
+    userInfoArg,
+} from "types";
 import { deleteCookie, setCookie } from "utils/funcs";
 import {
     forgotPasswordRequest,
@@ -14,13 +23,13 @@ import {
 import { appReducer } from "./app";
 // import { appReducer } from "./app";
 
-export const getUserInfo = createAsyncThunk("userInfoReducer/getUserInfo", async (tmp=undefined,thunkApi) => {
+export const getUserInfo = createAsyncThunk("userInfoReducer/getUserInfo", async (tmp = undefined, thunkApi) => {
     try {
-        const store:any = thunkApi.getState()
+        const store: any = thunkApi.getState();
         const response = await getUserInfoRequest(store.userInfo.accessToken);
         const data = await response.json();
-        if (data.success) {  
-            thunkApi.dispatch(appReducer.actions.setTmpFg())          
+        if (data.success) {
+            thunkApi.dispatch(appReducer.actions.setTmpFg());
             return data;
         } else {
             console.log(data.message);
@@ -30,12 +39,14 @@ export const getUserInfo = createAsyncThunk("userInfoReducer/getUserInfo", async
     }
 });
 
-export const appStart = createAsyncThunk("userInfoReducer/appStart", async (tmp=undefined, {dispatch}) => {
+export const appStart = createAsyncThunk("userInfoReducer/appStart", async (tmp = undefined, { dispatch }) => {
     try {
         const response = await refreshTokenRequest();
         const data = await response.json();
-        if (data.success) {            
-            setTimeout(()=>{dispatch(getUserInfo())},200)
+        if (data.success) {
+            setTimeout(() => {
+                dispatch(getUserInfo());
+            }, 200);
             return data;
         } else {
             console.log(data.message);
@@ -57,7 +68,7 @@ export const logIn = createAsyncThunk("userInfoReducer/logIn", async (form) => {
     }
 });
 
-export const registnration = createAsyncThunk("userInfoReducer/registnration", async (form) => {
+export const registnration = createAsyncThunk("userInfoReducer/registnration", async (form: registrationFormType) => {
     try {
         const response = await registerRequest(form);
         const data = await response.json();
@@ -85,7 +96,7 @@ export const forgotPassword = createAsyncThunk("userInfoReducer/forgotPassword",
     }
 });
 
-export const resetPassword = createAsyncThunk("userInfoReducer/resetPassword", async (form) => {
+export const resetPassword = createAsyncThunk("userInfoReducer/resetPassword", async (form: resetPaswordForm) => {
     try {
         const response = await resetPasswordRequest(form);
         const data = await response.json();
@@ -182,7 +193,7 @@ export const userInfoReducer = createSlice({
                 state.redirectTo = "/login";
             })
             .addCase(logout.fulfilled, (state, action) => {
-                state.isLoad = initStateUserInfoReducer.isLoad
+                state.isLoad = initStateUserInfoReducer.isLoad;
                 state.redirectTo = initStateUserInfoReducer.redirectTo;
                 state.isAuth = initStateUserInfoReducer.isAuth;
                 state.name = initStateUserInfoReducer.name;
@@ -196,10 +207,10 @@ export const userInfoReducer = createSlice({
                 state.email = action.payload.user.email;
             })
             .addCase(appStart.fulfilled, (state, action: PayloadAction<refreshTokenResponse>) => {
-                
                 setCookie("refreshToken", action.payload.refreshToken);
                 state.accessToken = action.payload.accessToken.split(" ")[1];
-            }).addCase(getUserInfo.fulfilled, (state, action: PayloadAction<updateUserInfoResponse>) => {                
+            })
+            .addCase(getUserInfo.fulfilled, (state, action: PayloadAction<updateUserInfoResponse>) => {
                 state.name = action.payload.user.name;
                 state.email = action.payload.user.email;
                 state.isAuth = true;

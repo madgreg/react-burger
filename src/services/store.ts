@@ -27,4 +27,4 @@ export const store = configureStore({
     devTools: process.env.NODE_ENV !== "production",
 });
 
-// export type RootStore = ReturnType<typeof rootReducer>
+export type RootStore = ReturnType<typeof rootReducer>

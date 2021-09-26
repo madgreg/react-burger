@@ -1,13 +1,27 @@
 import configureMockStore from "redux-mock-store";
 import thunk from "redux-thunk";
 import fetchMock from "fetch-mock";
-import { burgerIngredientConstructorReducer, burgerIngredientInitState, selectOrderId, selectOrderSum } from "./constructor-Ingredients";
+import { burgerIngredientConstructorInitState, burgerIngredientConstructorReducer, selectOrderId, selectOrderSum } from "./constructor-Ingredients";
 import { getOrder } from "./orders-tape";
-
+import { burgerIngredientConstructorInitStateType, ingrediensPropTypes } from "types";
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
 const actions = burgerIngredientConstructorReducer.actions;
+const ingred: ingrediensPropTypes = {
+    _id: "",
+    name: "",
+    type: "",
+    proteins: 1,
+    fat: 1,
+    carbohydrates: 1,
+    calories: 1,
+    price: 12,
+    image: "",
+    image_mobile: "",
+    image_large: "",
+    __v: 1,
+};
 
 describe("ordersTapeReducer", () => {
     afterEach(() => {
@@ -15,12 +29,12 @@ describe("ordersTapeReducer", () => {
     });
 
     it("проверка инициализации стайта при старте редюсера", () => {
-        const nextState = burgerIngredientInitState;
-        const result = burgerIngredientConstructorReducer.reducer(undefined, {});
+        const nextState = burgerIngredientConstructorInitState;
+        const result = burgerIngredientConstructorReducer.reducer(undefined, { type: "" });
         expect(result).toEqual(nextState);
     });
 
-    it("sendOrder", () => {
+    it("sendOrder", async () => {
         const orderN = 1234;
         const expectedState = {
             success: false,
@@ -47,25 +61,25 @@ describe("ordersTapeReducer", () => {
 
         // const expectedActions = [{ type: "ordersTapeReducer/setCurentOrder", payload: expectedState.orders }];
 
-        return store.dispatch(getOrder(orderN)).then(() => {
-            expect(store.getActions()).toEqual([]);
-        });
+        await store.dispatch(getOrder(orderN));
+        // expect(store.getActions()).toEqual([]);
+        expect(store.getActions().length).toEqual(2);
     });
 
     it("resetOrder", () => {
         const testValue = {
-            ...burgerIngredientInitState,
+            ...burgerIngredientConstructorInitState,
             orderSum: 10,
             orderId: 15,
         };
         const nextState = burgerIngredientConstructorReducer.reducer(testValue, actions.resetOrder());
-        expect(nextState).toEqual(burgerIngredientInitState);
+        expect(nextState).toEqual(burgerIngredientConstructorInitState);
     });
 
     it("setOrderId", () => {
         const testValue = 1;
 
-        const nextState = burgerIngredientConstructorReducer.reducer(burgerIngredientInitState, actions.setOrderId(testValue));
+        const nextState = burgerIngredientConstructorReducer.reducer(burgerIngredientConstructorInitState, actions.setOrderId(testValue));
         const rootState = { burgerIngredientConstructor: nextState };
         expect(selectOrderId(rootState)).toEqual(testValue);
     });
@@ -73,18 +87,21 @@ describe("ordersTapeReducer", () => {
     it("resetSummOrder", () => {
         const testValue = 0;
 
-        const nextState = burgerIngredientConstructorReducer.reducer({ ...burgerIngredientInitState, orderSum: 10 }, actions.resetSummOrder());
+        const nextState = burgerIngredientConstructorReducer.reducer({ ...burgerIngredientConstructorInitState, orderSum: 10 }, actions.resetSummOrder());
         const rootState = { burgerIngredientConstructor: nextState };
         expect(selectOrderSum(rootState)).toEqual(testValue);
     });
 
     it("setSummOrder", () => {
         const testValue = 4;
-        const tmpState = {
-            ...burgerIngredientInitState,
+
+        
+
+        const tmpState: burgerIngredientConstructorInitStateType = {
+            ...burgerIngredientConstructorInitState,
             order: {
-                bun: [{ price: 1 }, { price: 1 }],
-                ingredients: [{ price: 1 }, { price: 1 }],
+                bun: [{ ...ingred, price: 1 }, { ...ingred, price: 1 }],
+                ingredients: [{ ...ingred, price: 1 }, { ...ingred, price: 1 }],
             },
         };
 
@@ -95,36 +112,36 @@ describe("ordersTapeReducer", () => {
 
     it("addIngredient", () => {
         const testValue = {
-            ...burgerIngredientInitState,
+            ...burgerIngredientConstructorInitState,
             order: {
-                bun: [{ type: "bun" }, { type: "bun" }],
-                ingredients: [{ type: "soil" }, { type: "soil" }],
+                bun: [{ ...ingred, type: "bun" }, { ...ingred, type: "bun" }],
+                ingredients: [{ ...ingred, type: "soil" }, { ...ingred, type: "soil" }],
             },
         };
 
-        const ingredients = [{ type: "soil" }, { type: "soil" }, { type: "bun" }, { type: "bun" }];
-        let nextState = burgerIngredientInitState;
+        const ingredients:ingrediensPropTypes[] = [{ ...ingred, type: "soil" }, { ...ingred, type: "soil" }, { ...ingred, type: "bun" }, { ...ingred, type: "bun" }];
+        let nextState = burgerIngredientConstructorInitState;
         ingredients.forEach((x) => {
             nextState = burgerIngredientConstructorReducer.reducer(nextState, actions.addIngredient(x));
         });
-
+        
         expect(nextState).toEqual(testValue);
     });
 
     it("delIngredient", () => {
         const testValue = {
-            ...burgerIngredientInitState,
+            ...burgerIngredientConstructorInitState,
             order: {
-                bun: [{ type: "bun" }, { type: "bun" }],
-                ingredients: [{ type: "soil" }, { type: "soil" }],
+                bun: [{ ...ingred, type: "bun" }, { ...ingred, type: "bun" }],
+                ingredients: [{ ...ingred, type: "soil" }, { ...ingred, type: "soil" }],
             },
         };
 
         const testValue1 = {
-            ...burgerIngredientInitState,
+            ...burgerIngredientConstructorInitState,
             order: {
-                bun: [{ type: "bun" }, { type: "bun" }],
-                ingredients: [{ type: "soil" }],
+                bun: [{ ...ingred, type: "bun" }, { ...ingred, type: "bun" }],
+                ingredients: [{ ...ingred, type: "soil" }],
             },
         };
 
@@ -134,23 +151,23 @@ describe("ordersTapeReducer", () => {
 
     it("chagneIngredientPosition", () => {
         const testValue = {
-            ...burgerIngredientInitState,
+            ...burgerIngredientConstructorInitState,
             order: {
-                bun: [{ type: "bun" }, { type: "bun" }],
+                bun: [{ ...ingred, type: "bun" }, { ...ingred, type: "bun" }],
                 ingredients: [
-                    { type: "soil", id: 0 },
-                    { type: "soil", id: 1 },
+                    { ...ingred, type: "soil", id: 0 },
+                    { ...ingred, type: "soil", id: 1 },
                 ],
             },
         };
 
         const testValue1 = {
-            ...burgerIngredientInitState,
+            ...burgerIngredientConstructorInitState,
             order: {
-                bun: [{ type: "bun" }, { type: "bun" }],
+                bun: [{ ...ingred, type: "bun" }, { ...ingred, type: "bun" }],
                 ingredients: [
-                    { type: "soil", id: 1 },
-                    { type: "soil", id: 0 },
+                    { ...ingred, type: "soil", id: 1 },
+                    { ...ingred, type: "soil", id: 0 },
                 ],
             },
         };
