@@ -12,8 +12,8 @@ import { useHistory } from "react-router-dom";
 
 import { useDispatch } from "react-redux";
 import PropTypes from "prop-types";
-import { ingrediensPropTypes } from "types";
-import { burgerIngredientConstructorReducer, sendOrder } from "services/reduсers/slices/constructor-Ingredients";
+
+import { burgerIngredientConstructorReducer, selectBIConstructorIsLoad, sendOrder } from "services/reduсers/slices/constructor-Ingredients";
 import { appReducer } from "services/reduсers/slices/app";
 
 const ConstructorElementWraper = ({ ingredient, index, opt, handleClose, moveIngredient }) => {
@@ -69,23 +69,23 @@ const ConstructorElementWraper = ({ ingredient, index, opt, handleClose, moveIng
     );
 };
 
-ConstructorElementWraper.propTypes = {
-    ingredient: ingrediensPropTypes.isRequired,
-    index: PropTypes.number.isRequired,
-    opt: PropTypes.object.isRequired,
-    handleClose: PropTypes.func.isRequired,
-    moveIngredient: PropTypes.func.isRequired,
-};
+// ConstructorElementWraper.propTypes = {
+//     ingredient: ingrediensPropTypes.isRequired,
+//     index: PropTypes.number.isRequired,
+//     opt: PropTypes.object.isRequired,
+//     handleClose: PropTypes.func.isRequired,
+//     moveIngredient: PropTypes.func.isRequired,
+// };
 
 export default function BurgerConstructor() {
     const { orderId, orderSum } = useSelector((store) => store.burgerIngredientConstructor);
     const order = useSelector((store) => store.burgerIngredientConstructor.order);
     const { actions } = burgerIngredientConstructorReducer;
-    const { isAuth } = useSelector((store) => store.userInfo);
+    const BIConstructorIsLoad = useSelector(selectBIConstructorIsLoad);
+    const { isAuth, accessToken } = useSelector((store) => store.userInfo);
 
     const dispatch = useDispatch();
     const history = useHistory();
-   
 
     const [, dropTarget] = useDrop({
         accept: "ingredients",
@@ -105,9 +105,10 @@ export default function BurgerConstructor() {
                     pathname: "/login",
                     state: { referrer: history.location.pathname },
                 });
-            } else {         
-                dispatch(appReducer.actions.setLoad(false));       
-                dispatch(sendOrder(order));
+            } else {
+                // actions.resetOrder
+                // dispatch(appReducer.actions.setLoad(false));
+                dispatch(sendOrder({ order, accessToken }));
             }
         }
     };
@@ -168,26 +169,40 @@ export default function BurgerConstructor() {
     });
 
     return (
-        <section className={[styles.main, "pl-4"].join(" ")}>
-            <div className="mt-25">{bloked[0]}</div>
-            <section style={{ display: "contents" }} ref={dropTarget} >
-                <div style={{ overflowY: "auto", height: 480 }} test-class='dnd-end'>{unbloked}</div>
-            </section>
-            <div className="mt-4">{bloked[1]}</div>
-            <div className={["mt-10", styles.price].join(" ")}>
-                <span className="mr-2 text text_type_digits-medium ">{orderSum}</span>
-                <div className="mr-10">
-                    <CurrencyIcon type="primary" />
+        <>
+            {!BIConstructorIsLoad && (
+                <section className={[styles.main, "pl-4"].join(" ")}>
+                    <div className="mt-25">{bloked[0]}</div>
+                    <section style={{ display: "contents" }} ref={dropTarget}>
+                        <div style={{ overflowY: "auto", height: 480 }} test-class="dnd-end">
+                            {unbloked}
+                        </div>
+                    </section>
+                    <div className="mt-4">{bloked[1]}</div>
+                    <div className={["mt-10", styles.price].join(" ")}>
+                        <span className="mr-2 text text_type_digits-medium ">{orderSum}</span>
+                        <div className="mr-10">
+                            <CurrencyIcon type="primary" />
+                        </div>
+                        {orderId && (
+                            <Modal onClose={unSendOrderHandler} title="">
+                                <OrderDetails orderId={orderId + ""} />
+                            </Modal>
+                        )}
+                        <Button type="primary" size="large" onClick={sendOrderHandler}>
+                            Оформить заказ
+                        </Button>
+                    </div>
+                </section>
+            )}
+
+            {BIConstructorIsLoad && (
+                <div className="loader">
+                    <div className="inner one"></div>
+                    <div className="inner two"></div>
+                    <div className="inner three"></div>
                 </div>
-                {orderId && (
-                    <Modal onClose={unSendOrderHandler} title="">
-                        <OrderDetails orderId={orderId + ""} />
-                    </Modal>
-                )}
-                <Button type="primary" size="large" onClick={sendOrderHandler}>
-                    Оформить заказ
-                </Button>
-            </div>
-        </section>
+            )}
+        </>
     );
 }

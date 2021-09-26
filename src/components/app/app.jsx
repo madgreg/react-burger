@@ -8,36 +8,47 @@ import LoginPage from "pages/login";
 import RegisterPage from "pages/register";
 import ForgotPasswordPage from "pages/forgot-password";
 import ResetPasswordPage from "pages/reset-password";
-import { loadBurgerIngredient } from "services/reduсers/slices/burger-ingredient";
+import { loadBurgerIngredient, selectIsLoadBI } from "services/reduсers/slices/burger-ingredient";
 
 import HomePage from "pages/home";
 import { ProtectedRoute } from "components/protected-route/protected-route";
-import { appStart } from "services/reduсers/slices/user-Info";
+import { appStart, userInfoReducer } from "services/reduсers/slices/user-Info";
 import ProfilePage from "pages/profile";
 import { ProtectedRouteAuth } from "components/protected-route/protected-route-auth";
 import IngredientDetails from "components/ingredient-details/ingredient-details";
 import OrderTape from "pages/order-tape";
 import OrdersTape from "pages/orders-tape";
+import { appReducer, selectAppInfoIsLoad } from "services/reduсers/slices/app";
+import { getCookie } from "utils/funcs";
 
-console.log(React.version)
+
 
 export default function App() {
     const dispatch = useDispatch();
-    const { isLoad } = useSelector((store) => store.appInfo);    
+    const isLoadAppInfo  = useSelector(selectAppInfoIsLoad);    
+    const isLoadBI  = useSelector(selectIsLoadBI);
+    
 
     useEffect(() => {
-        dispatch(loadBurgerIngredient());
-        // dispatch({type: "burgerIngredient/loadBurgerIngredient"})
-        dispatch(appStart());
+        dispatch(loadBurgerIngredient());   
+        if (getCookie("refreshToken")) {     
+            dispatch(appStart());
+        }else{
+            dispatch(userInfoReducer.actions.setAuth(false));
+            dispatch(appReducer.actions.setTmpFg());
+        }
     }, [dispatch]);
 
-    useEffect(() => {}, [isLoad]);
+    // useEffect(() => {
+    //     console.log(isLoadAppInfo,isLoadBI)
+    // },[isLoadAppInfo,isLoadBI])
+    
 
     return (
         <section className={styles.app}>
             <Router>
                 <AppHeader />
-                {isLoad && (
+                {isLoadAppInfo && isLoadBI && (
                     <main className={styles.main_content}>
                         <Switch>
                             <Route path="/" exact={true}>
@@ -62,6 +73,7 @@ export default function App() {
                             <ProtectedRoute path="/profile/orders" exact={true}>
                                 <ProfilePage />
                             </ProtectedRoute>
+
                             <ProtectedRoute
                                 path="/profile/orders/:id"
                                 exact={true}
@@ -141,7 +153,7 @@ export default function App() {
                         </Switch>
                     </main>
                 )}
-                {!isLoad && (
+                {(!isLoadAppInfo || !isLoadBI)  && (
                     <div className="loader">
                         <div className="inner one"></div>
                         <div className="inner two"></div>

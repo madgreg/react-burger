@@ -14,9 +14,9 @@ import { selectBurgerIngredients } from "services/reduсers/slices/burger-ingred
 const getBody = (curentOrder, listIngridient, orderSum) => {
     return (
         <>
-            <div className="text text_type_main-medium pb-3">{curentOrder[0].name}</div>
-            <div className="text text_type_main-small pb-15" style={{ color: orderState[curentOrder[0].status][1] }}>
-                {orderState[curentOrder[0].status][0]}
+            <div className="text text_type_main-medium pb-3">{curentOrder.name}</div>
+            <div className="text text_type_main-small pb-15" style={{ color: orderState[curentOrder.status][1] }}>
+                {orderState[curentOrder.status][0]}
             </div>
             <div className="text text_type_main-medium pb-6">Состав:</div>
             <ul style={{ listStyle: "none", padding: 0, paddingTop: 5, paddingRight: 6, height: 312, overflowY: "auto" }}>
@@ -53,7 +53,7 @@ const getBody = (curentOrder, listIngridient, orderSum) => {
                 })}
             </ul>
             <div style={{ display: "flex", justifyContent: "space-between" }} className="pt-10 pb-6">
-                <div className="text text_type_main-default text_color_inactive">{getDaysAfter(curentOrder[0].createdAt)}</div>
+                <div className="text text_type_main-default text_color_inactive">{getDaysAfter(curentOrder.createdAt)}</div>
                 <div style={{ display: "flex" }}>
                     <div className="text text_type_digits-default pr-2">{orderSum}</div>
                     <CurrencyIcon type="primary" />
@@ -86,7 +86,7 @@ const OrderTape = ({ isModal = false }) => {
         if (curentOrder) {
             let sumOrd = 0;
             let lst = {};
-            curentOrder[0].ingredients.forEach((ingredientId) => {
+            curentOrder.ingredients.forEach((ingredientId) => {
                 const ingridient = burgerIngredients.filter((x) => x._id === ingredientId)[0];
                 if (ingridient) {
                     sumOrd = sumOrd + ingridient.price;
@@ -111,7 +111,7 @@ const OrderTape = ({ isModal = false }) => {
     return (
         <>
             {isModal && curentOrder && (
-                <Modal onClose={closeModal} title={"#" + curentOrder[0].number} titleSize="text_type_digits-default">
+                <Modal onClose={closeModal} title={"#" + curentOrder.number} titleSize="text_type_digits-default">
                     <div style={{ margin: "auto" }}>
                         <div style={{ width: 620, height: 640 }} className="mt-10">
                             {getBody(curentOrder, listIngridient, orderSum)}
@@ -123,7 +123,7 @@ const OrderTape = ({ isModal = false }) => {
                 <div style={{ margin: "auto" }}>
                     <div style={{ width: 620, height: 640 }} className="mt-30">
                         <div className="text text_type_digits-default pb-10" style={{ textAlign: "center" }}>
-                            #{curentOrder[0].number}
+                            #{curentOrder.number}
                         </div>
                         {getBody(curentOrder, listIngridient, orderSum)}
                     </div>

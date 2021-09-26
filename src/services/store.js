@@ -26,3 +26,5 @@ export const store = configureStore({
     middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(socketMiddleware(wsActions1)).concat(socketMiddleware(wsActions2)),
     devTools: process.env.NODE_ENV !== "production",
 });
+
+// export type RootStore = ReturnType<typeof rootReducer>

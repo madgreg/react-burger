@@ -46,11 +46,7 @@ const IngredienCard = ({ ingredien, count = 0, cssCls = "" }) => {
     );
 };
 
-IngredienCard.propTypes = {
-    ingredien: ingrediensPropTypes.isRequired,
-    count: PropTypes.number,
-    cssCls: PropTypes.string,
-};
+
 
 const getIngredientCount = (id, data) => {
     return data.reduce((total, x) => (x._id === id ? total + 1 : total), 0);
