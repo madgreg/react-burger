@@ -6,14 +6,10 @@ import { loadBurgerIngredientRequest } from "../api";
 // burgerIngredient API
 
 export const loadBurgerIngredient = createAsyncThunk("burgerIngredient/loadBurgerIngredient", async () => {
-    try {
-        const response = await loadBurgerIngredientRequest();
-        const data = await response.json();
-        if (data.success) {
-            return data.data;
-        }
-    } catch (error) {
-        console.log("=error:", error);
+    const response = await loadBurgerIngredientRequest();
+    const data = await response.json();
+    if (data.success) {
+        return data.data;
     }
 });
 
@@ -32,7 +28,7 @@ export const burgerIngredientReducer = createSlice({
         setModal: (state, action: PayloadAction<boolean>) => {
             state.isModal = action.payload;
         },
-        setCurrentViewIngredient: (state, action: PayloadAction<string>) => {
+        setCurrentViewIngredient: (state, action: PayloadAction<string | any>) => {
             const ingridient = state.burgerIngredients.filter((x) => x._id === action.payload)[0];
             state.currentViewIngredient = ingridient ? ingridient : null;
         },

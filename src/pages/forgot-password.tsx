@@ -2,17 +2,17 @@ import { Button, Input } from "@ya.praktikum/react-developer-burger-ui-component
 import React, { useCallback, useState } from "react";
 import { Link } from "react-router-dom";
 import styles from "./login.module.css";
-import { useDispatch } from "react-redux";
 import { forgotPassword, userInfoReducer } from "services/reduсers/slices/user-Info";
-import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
+import { RootStore } from "services/store";
+import { useAppDispatch, useAppSelector } from "services/hooks";
 
 const ForgotPasswordPage = () => {
     const [form, setValue] = useState({ email: "" });
-    const { redirectTo } = useSelector((store) => store.userInfo);
+    const { redirectTo } = useAppSelector((store:RootStore) => store.userInfo);
     const { setRedirectTo } = userInfoReducer.actions;
 
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
     const history = useHistory();
 
     const onChange = (e) => {

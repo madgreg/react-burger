@@ -69,9 +69,11 @@ export type TOrderSendResponse = {
 export type TInitStateOrdersTapeReducerType = {
     curentOrder: TOrderType | null;
     orderList: TOrderType[];
+    total: number | null;
+    totalToday: number | null;
 };
 
-export type TUserOrdersReducerInitStateType = Omit<TInitStateOrdersTapeReducerType, 'orderList'>
+export type TUserOrdersReducerInitStateType = Pick<TInitStateOrdersTapeReducerType, "curentOrder">;
 
 export type TOrderType = {
     _id: string;
@@ -88,6 +90,8 @@ export type TOrderType = {
 export type TGetOrderTapeResponse = {
     success: boolean;
     orders: TOrderType[];
+    total: number | null;
+    totalToday: number | null;
 };
 
 export type TInitappReducerStateType = {
@@ -100,8 +104,8 @@ export type TInitStateUserInfoReducerType = {
     isLoad: boolean;
     redirectTo: string | null;
     isAuth: boolean;
-    name: string | null;
-    email: string | null;
+    name: string;
+    email: string;
     accessToken: string | null;
 };
 
@@ -113,7 +117,7 @@ export type TUserInfoArg = {
 export type TLogInResponse = {
     success: boolean;
     accessToken: string;
-    refreshToken: string;    
+    refreshToken: string;
     user: TUserInfoArg;
 };
 
@@ -121,45 +125,64 @@ export type TUpdateUserInfoResponse = Omit<TLogInResponse, "accessToken" | "refr
 export type TRefreshTokenResponse = Omit<TLogInResponse, "user">;
 
 export type TUpdateUserInforArg = {
-    form: string;
-    accessToken: string;
+    form: TRegistrationFormType;
+    accessToken: string | null;
 };
 
 export type TRegistrationFormType = {
-    email: string; 
-    password: string; 
-    name: string; 
-} 
+    email: string;
+    password: string;
+    name: string;
+};
+
+export type TForgotPasswordForm = Pick<TRegistrationFormType, "email">;
+export type TLoginForm = Omit<TRegistrationFormType, "name">;
 
 export type TResetPaswordForm = {
     password: string;
     token: string;
-}
+};
 
-type TIconTypes = 'secondary' | 'primary' | 'error' | 'success';
+type TIconTypes = "secondary" | "primary" | "error" | "success";
 
 export type THeaderButton = {
-    iconName:string;
-    iconType:TIconTypes;
-    inActive?: number; 
-    first?: number; 
-    children: ReactChild; 
-    onClick?: (e:React.MouseEvent)=>void;
-} 
+    iconName: string;
+    iconType: TIconTypes;
+    inActive?: number;
+    first?: number;
+    children: ReactChild;
+    onClick?: (e: React.MouseEvent) => void;
+};
 
 export type TModal = {
-    children: ReactChild; 
+    children: ReactChild;
     onClose: any; ///разобраться с фенкциями
-    title: string; 
+    title: string;
     titleSize?: string;
     marginCls?: string;
 };
 
 export type TModalOverlay = {
-    children: ReactChild, 
-    onClick: any
+    children: ReactChild;
+    onClick: any;
 };
 
-export type TOrderDetails = {    
+export type TOrderDetails = {
     orderId: string;
+};
+
+export type TOrdersList = {
+    pathname: string;
+};
+
+export type TIngredientDetails = {
+    isModal: boolean;
+};
+
+export type TConstructorElementWraper = {
+    ingredient: TIngrediensTypes,
+    index: number,
+    opt: object,
+    // handleClose:<string:number:any>()=> void,
+    moveIngredient: ()=>void
 };

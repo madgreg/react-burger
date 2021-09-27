@@ -6,14 +6,10 @@ import { sendOrderRequest } from "../api";
 // constructorIngredients API
 
 export const sendOrder = createAsyncThunk("burgerIngredientConstructor/sendOrder", async (orderArg: TSendOrderArg) => {
-    try {
-        const response = await sendOrderRequest(orderArg.order, orderArg.accessToken);
-        const data = await response.json();
-        if (data.success) {
-            return data;
-        }
-    } catch (error) {
-        console.log("=error:", error);
+    const response = await sendOrderRequest(orderArg.order, orderArg.accessToken);
+    const data = await response.json();
+    if (data.success) {
+        return data;
     }
 });
 
@@ -77,7 +73,7 @@ export const burgerIngredientConstructorReducer = createSlice({
                 state.isLoad = true;
             })
             .addCase(sendOrder.fulfilled, (state, action: PayloadAction<TOrderSendResponse>) => {
-                state.isLoad = false;                
+                state.isLoad = false;
                 state.orderId = action.payload.order.number;
             });
     },

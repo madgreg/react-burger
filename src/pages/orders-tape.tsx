@@ -1,14 +1,17 @@
 import { OrdersList } from "components/orders-list/orders-list";
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+
 import { WS_CONNECTION_CLOSE, WS_CONNECTION_START } from "services/reduсers/actions";
 import { wsUrlAll } from "utils/vars";
 import styles from "./orders-tape.module.css";
+import { RootStore } from "services/store";
+import { TOrderType } from "types";
+import { useAppDispatch, useAppSelector } from "services/hooks";
 
 // 'pending' 'done'.  «Готовится» и «Выполнен»
 
 const subArrays = (array, size) => {
-    let subarray = [];
+    let subarray:any = [];
     for (let i = 0; i < Math.ceil(array.length / size); i++) {
         subarray[i] = array.slice(i * size, i * size + size);
     }
@@ -16,16 +19,17 @@ const subArrays = (array, size) => {
 };
 
 const OrdersTape = () => {
-    const dispatch = useDispatch();
-    const { orders, total, totalToday } = useSelector((store) => store.ordersTape.orderList);
-    const [doneOrder, setDoneOrder] = useState([]);
-    const [pendingOrder, setPendingOrder] = useState([]);
-
+    const dispatch = useAppDispatch();
+    const { orderList, total, totalToday } = useAppSelector((store: RootStore) => store.ordersTape);
+    const tmp:number[][] | any = []
+    const [doneOrder, setDoneOrder] = useState(tmp);
+    const [pendingOrder, setPendingOrder] = useState(tmp);
+    const orders = orderList;
     useEffect(() => {
-        let doneOrder_ = [];
-        let pendingOrder_ = [];
+        let doneOrder_: number[] = [];
+        let pendingOrder_: number[] = [];
         if (orders) {
-            orders.forEach((order) => {
+            orders.forEach((order: TOrderType) => {
                 if (order.status === "done") {
                     doneOrder_.push(order.number);
                 } else {
@@ -45,7 +49,7 @@ const OrdersTape = () => {
 
     useEffect(() => {
         dispatch({ type: WS_CONNECTION_START, payload: wsUrlAll });
-        return () => dispatch({ type: WS_CONNECTION_CLOSE });
+        return () => {dispatch({ type: WS_CONNECTION_CLOSE });}
     }, [dispatch]);
 
     return (
@@ -69,7 +73,7 @@ const OrdersTape = () => {
                                     <div key={`doneOrder${idx}`} className={styles.status_column}>
                                         {block.map((itm, idx) => {
                                             return (
-                                                <div key = {idx} className="text text_type_digits-default pb-2" style={{ color: "#00CCCC" }}>
+                                                <div key={idx} className="text text_type_digits-default pb-2" style={{ color: "#00CCCC" }}>
                                                     {itm}
                                                 </div>
                                             );
@@ -84,7 +88,11 @@ const OrdersTape = () => {
                                 return (
                                     <div key={`pendingOrder${idx}`} className={styles.status_column}>
                                         {block.map((itm, idx) => {
-                                            return <div  key = {idx} className="text text_type_digits-default pb-2">{itm}</div>;
+                                            return (
+                                                <div key={idx} className="text text_type_digits-default pb-2">
+                                                    {itm}
+                                                </div>
+                                            );
                                         })}
                                     </div>
                                 );

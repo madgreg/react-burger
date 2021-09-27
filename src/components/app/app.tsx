@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
+import React, { FC, useEffect } from "react";
 import AppHeader from "../app-header/app-header";
 import styles from "./app.module.css";
-import { useDispatch, useSelector } from "react-redux";
+
 
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import LoginPage from "pages/login";
@@ -20,29 +20,23 @@ import OrderTape from "pages/order-tape";
 import OrdersTape from "pages/orders-tape";
 import { appReducer, selectAppInfoIsLoad } from "services/reduсers/slices/app";
 import { getCookie } from "utils/funcs";
+import { useAppDispatch, useAppSelector } from "services/hooks";
 
-
-
-export default function App() {
-    const dispatch = useDispatch();
-    const isLoadAppInfo  = useSelector(selectAppInfoIsLoad);    
-    const isLoadBI  = useSelector(selectIsLoadBI);
-    
+const App: FC = () => {
+    const dispatch = useAppDispatch();
+    const isLoadAppInfo = useAppSelector(selectAppInfoIsLoad);
+    const isLoadBI = useAppSelector(selectIsLoadBI);
 
     useEffect(() => {
-        dispatch(loadBurgerIngredient());   
-        if (getCookie("refreshToken")) {     
+        dispatch(loadBurgerIngredient());
+        if (getCookie("refreshToken")) {
             dispatch(appStart());
-        }else{
+        } else {
             dispatch(userInfoReducer.actions.setAuth(false));
             dispatch(appReducer.actions.setTmpFg());
         }
     }, [dispatch]);
 
-    // useEffect(() => {
-    //     console.log(isLoadAppInfo,isLoadBI)
-    // },[isLoadAppInfo,isLoadBI])
-    
 
     return (
         <section className={styles.app}>
@@ -95,7 +89,9 @@ export default function App() {
                                         </>
                                     );
                                 }}
-                            ><></></ProtectedRoute>
+                            >
+                                <></>
+                            </ProtectedRoute>
 
                             <Route path="/feed" exact={true}>
                                 <OrdersTape />
@@ -129,13 +125,13 @@ export default function App() {
                                 render={(state) => {
                                     return (
                                         <>
-                                            {state.location.state && state.location.state.modal && state.history.action === "PUSH" &&  (
+                                            {state.location.state && state.location.state.modal && state.history.action === "PUSH" && (
                                                 <>
                                                     <HomePage />
-                                                    <IngredientDetails  isModal={true}/>
+                                                    <IngredientDetails isModal={true} />
                                                 </>
                                             )}
-                                            {state.history.action !== "PUSH" &&(
+                                            {state.history.action !== "PUSH" && (
                                                 <>
                                                     <IngredientDetails />
                                                 </>
@@ -153,7 +149,7 @@ export default function App() {
                         </Switch>
                     </main>
                 )}
-                {(!isLoadAppInfo || !isLoadBI)  && (
+                {(!isLoadAppInfo || !isLoadBI) && (
                     <div className="loader">
                         <div className="inner one"></div>
                         <div className="inner two"></div>
@@ -163,4 +159,6 @@ export default function App() {
             </Router>
         </section>
     );
-}
+};
+
+export default App;

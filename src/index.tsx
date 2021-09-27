@@ -8,8 +8,6 @@ import "./index.css";
 import reportWebVitals from "./reportWebVitals";
 import { store } from "services/store";
 
-
-
 ReactDOM.render(
     <React.StrictMode>
         <Provider store={store}>

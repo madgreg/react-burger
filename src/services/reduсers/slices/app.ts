@@ -13,10 +13,6 @@ export const appReducer = createSlice({
     reducers: {
         setTmpFg: (state) => {
             state.isLoad = true;
-            // state.tmpFg = state.tmpFg + 1;
-            // if (state.tmpFg === 1) {
-            //     state.isLoad = true;
-            // }
         },
         setLoad: (state, action: PayloadAction<boolean>) => {
             state.isLoad = action.payload;

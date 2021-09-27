@@ -15,5 +15,5 @@ export const userOrdersReducer = createSlice({
     },
 });
 
-export const selectCurentOrder = (state) => state.userOrders.curentOrder;
+export const selectCurentOrder = (state) => state.userOrders.curentOrder; 
 

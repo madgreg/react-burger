@@ -1,14 +1,14 @@
-import React, { useEffect } from "react";
+import React, { FC, useEffect } from "react";
 import styles from "./tab-bar.module.css";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components/dist/ui/tab";
 import { bunMenu, mainMenu, sauceMenu } from "utils/vars";
-import { useSelector, useDispatch } from "react-redux";
+
 import { burgerIngredientReducer, selectCurrentTab } from "services/reduсers/slices/burger-ingredient";
+import { useAppDispatch, useAppSelector } from "services/hooks";
 
-
-export default function TabBar() {
-    const dispatch = useDispatch();
-    const currentTab = useSelector(selectCurrentTab);
+const TabBar:FC = () => {
+    const dispatch = useAppDispatch();
+    const currentTab = useAppSelector(selectCurrentTab);
     const { actions } = burgerIngredientReducer;
     const [current, setCurrent] = React.useState(currentTab);
 
@@ -16,11 +16,15 @@ export default function TabBar() {
         setCurrent(currentTab);
     }, [currentTab]);
     const onClickHandler = (value) => {
-        dispatch(actions.setTab(value));        
-        document.querySelector(`.fake_${value}`).scrollIntoView({ block: "start", behavior: "smooth" });
-        setTimeout(()=>document.querySelector(`.${value}`).scrollIntoView({ block: "start" }), 1000)        
+        dispatch(actions.setTab(value));
+        const node1: HTMLDivElement | any = document.querySelector(`.fake_${value}`);
+        node1.scrollIntoView({ block: "start", behavior: "smooth" });
+        setTimeout(() => {
+            const node2: HTMLDivElement | any = document.querySelector(`.${value}`);
+            node2.scrollIntoView({ block: "start" });
+        }, 1000);
     };
-    
+
     return (
         <div className={styles.main}>
             <Tab value={bunMenu} active={current === bunMenu} onClick={onClickHandler}>
@@ -35,3 +39,5 @@ export default function TabBar() {
         </div>
     );
 }
+
+export default TabBar

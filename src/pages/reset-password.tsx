@@ -1,18 +1,20 @@
 import { Button, Input, PasswordInput } from "@ya.praktikum/react-developer-burger-ui-components";
 import React, { useCallback, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+
 
 import styles from "./login.module.css";
 
 import { resetPassword, userInfoReducer } from "services/reduсers/slices/user-Info";
 
 import { Link, useHistory } from "react-router-dom";
+import { RootStore } from 'services/store';
+import { useAppDispatch, useAppSelector } from "services/hooks";
 
 const ResetPasswordPage = () => {
     const [form, setValue] = useState({ password: "", token: "" });
-    const { redirectTo } = useSelector((store) => store.userInfo);
+    const { redirectTo } = useAppSelector((store:RootStore) => store.userInfo);
     const { setRedirectTo } = userInfoReducer.actions;
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
     const history = useHistory();
 
     useEffect(() => {
@@ -40,7 +42,7 @@ const ResetPasswordPage = () => {
             history.replace({ pathname: redirectTo, state: { referrer: history.location.pathname } });
         }
     }
-
+    
     return (
         <>
             {!redirectTo && (
@@ -54,7 +56,7 @@ const ResetPasswordPage = () => {
                                     value={form.password}
                                     name={"password"}
                                     size={"default"}
-                                    placeholder={"Введите новый пароль"}
+                                    // placeholder={"Введите новый пароль"}
                                 />
                             </div>
                             <div className="mb-6 input">

@@ -14,7 +14,7 @@ describe("AppReducer action creators", () => {
     });
 
     it("setActivePage", () => {        
-        const testValue = 2;    
+        const testValue = '2';    
         const expectedAction = {
             type: "appReducer/setActivePage",
             payload: testValue,

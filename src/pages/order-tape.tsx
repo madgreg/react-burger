@@ -3,15 +3,18 @@ import Modal from "components/modal/modal";
 import React, { useEffect, useState } from "react";
 
 import { appReducer } from "services/reduсers/slices/app";
-import { useDispatch, useSelector } from "react-redux";
+
 import { useParams, useHistory } from "react-router-dom";
 
 import { getOrder } from "services/reduсers/slices/orders-tape";
 import { getDaysAfter } from "utils/funcs";
 import { orderState } from "utils/vars";
 import { selectBurgerIngredients } from "services/reduсers/slices/burger-ingredient";
+import { RootStore } from "services/store";
+import { TOrderType } from "types";
+import { useAppDispatch, useAppSelector } from "services/hooks";
 
-const getBody = (curentOrder, listIngridient, orderSum) => {
+const getBody = (curentOrder: TOrderType, listIngridient: {}, orderSum: number) => {
     return (
         <>
             <div className="text text_type_main-medium pb-3">{curentOrder.name}</div>
@@ -65,11 +68,11 @@ const getBody = (curentOrder, listIngridient, orderSum) => {
 
 const OrderTape = ({ isModal = false }) => {
     const params = useParams();
-    const dispatch = useDispatch();
-    const { curentOrder } = useSelector((store) => store.ordersTape);
+    const dispatch = useAppDispatch();
+    const { curentOrder } = useAppSelector((store: RootStore) => store.ordersTape);
     const [listIngridient, setListIngridient] = useState({});
     const [orderSum, setOrderSum] = useState(0);
-    const burgerIngredients = useSelector(selectBurgerIngredients);
+    const burgerIngredients = useAppSelector(selectBurgerIngredients);
     const history = useHistory();
 
     useEffect(() => {

@@ -2,21 +2,19 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { TGetOrderTapeResponse, TInitStateOrdersTapeReducerType, TOrderType } from "types";
 import { getOrderRequest } from "../api";
 
-export const getOrder = createAsyncThunk("ordersTapeReducer/getOrder", async (order:number) => {
-    try {
-        const response = await getOrderRequest(order);
-        const data = await response.json();
-        if (data.success) {
-            return data;
-        }
-    } catch (error) {
-        console.log("=error:", error);
+export const getOrder = createAsyncThunk("ordersTapeReducer/getOrder", async (order: number) => {
+    const response = await getOrderRequest(order);
+    const data = await response.json();
+    if (data.success) {
+        return data;
     }
 });
 
 export const initStateOrdersTapeReducer: TInitStateOrdersTapeReducerType = {
     curentOrder: null,
     orderList: [],
+    total: null, 
+    totalToday: null
 };
 
 export const ordersTapeReducer = createSlice({
@@ -26,15 +24,16 @@ export const ordersTapeReducer = createSlice({
         setCurentOrder: (state, action: PayloadAction<TOrderType>) => {
             state.curentOrder = { ...action.payload };
         },
-        onMessage: (state, action: PayloadAction<TOrderType[]>) => {
-            state.orderList =  action.payload;
+        onMessage: (state, action: PayloadAction<TGetOrderTapeResponse>) => {
+            state.orderList = action.payload.orders;
         },
     },
     extraReducers: (builder) => {
-        builder            
-            .addCase(getOrder.fulfilled, (state, action: PayloadAction<TGetOrderTapeResponse>) => {
-                state.curentOrder = { ...action.payload.orders[0] };
-            });
+        builder.addCase(getOrder.fulfilled, (state, action: PayloadAction<TGetOrderTapeResponse>) => {
+            state.curentOrder = action.payload.orders[0];
+            state.total = action.payload.total;
+            state.totalToday = action.payload.totalToday;
+        });
     },
 });
 

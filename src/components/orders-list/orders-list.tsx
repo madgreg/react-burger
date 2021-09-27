@@ -1,35 +1,35 @@
 import { Link } from "react-router-dom";
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
-import React from "react";
-import { useSelector } from "react-redux";
+import React, { FC } from "react";
+
 import { getDaysAfter } from "utils/funcs";
 import { orderState } from "utils/vars";
 import { selectBurgerIngredients } from "services/reduсers/slices/burger-ingredient";
+import { RootStore } from "services/store";
+import { TOrdersList } from "types";
+import { useAppSelector } from "services/hooks";
 
-export const OrdersList = ({ pathname = "feed" }) => {
-    const { orders } = useSelector((store) => store.ordersTape.orderList);
-    const burgerIngredients = useSelector(selectBurgerIngredients);
-    
+export const OrdersList: FC<TOrdersList | any> = ({ pathname = "feed" }) => {
+    const orders = useAppSelector((store: RootStore) => store.ordersTape.orderList);
+    const burgerIngredients = useAppSelector(selectBurgerIngredients);
+    // console.log(orders)
     return (
         <div style={{ height: 916, overflowY: "auto" }}>
             <div className="pr-2" style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-                {orders && burgerIngredients &&
-                    orders.map((order) => {                        
-                        
-                        let orderSum = 0;                        
+                {orders &&
+                    burgerIngredients &&
+                    orders.map((order) => {
+                        let orderSum = 0;
                         order.ingredients.forEach((ingredient) => {
                             const ingridient = burgerIngredients.filter((x) => x._id === ingredient)[0];
-                            if(ingridient){
+                            if (ingridient) {
                                 orderSum += ingridient.price;
-                            }                            
-                        });                        
-                           
+                            }
+                        });
+
                         return (
                             <Link key={order.number} to={{ pathname: `/${pathname}/${order.number}`, state: { modal: true } }}>
-                                <div
-                                    style={{  backgroundColor: "#1C1C21", borderRadius: 40, zIndex: "-20", position: "relative" }}
-                                    className="p-6"
-                                >
+                                <div style={{ backgroundColor: "#1C1C21", borderRadius: 40, zIndex: -20, position: "relative" }} className="p-6">
                                     <div style={{ display: "flex", justifyContent: "space-between" }} className="pb-6">
                                         <div className="text text_type_digits-default">#{order.number}</div>
                                         <div className="text text_type_main-small text_color_inactive">{getDaysAfter(order.createdAt)}</div>
@@ -44,24 +44,26 @@ export const OrdersList = ({ pathname = "feed" }) => {
                                         <div>
                                             {order.ingredients.slice(0, 5).map((ingredientId, idx) => {
                                                 const ingridient = burgerIngredients.filter((x) => x._id === ingredientId)[0];
-                                                return (ingridient &&
-                                                    <img
-                                                        // src={ingridient.image_mobile}
-                                                        alt=""
-                                                        key={idx}
-                                                        style={{
-                                                            width: 68,
-                                                            height: 68,
-                                                            background: "#131316",
-                                                            borderRadius: 100,
-                                                            border: "1px solid #7231ed",
-                                                            position: "relative",
-                                                            zIndex: -1 - idx,
-                                                            marginLeft: idx > 0 ? -15 : 0,
-                                                            backgroundImage: `url(${ingridient.image_mobile})`,
-                                                            backgroundPosition: "center",
-                                                        }}
-                                                    />
+                                                return (
+                                                    ingridient && (
+                                                        <img
+                                                            // src={ingridient.image_mobile}
+                                                            alt=""
+                                                            key={idx}
+                                                            style={{
+                                                                width: 68,
+                                                                height: 68,
+                                                                background: "#131316",
+                                                                borderRadius: 100,
+                                                                border: "1px solid #7231ed",
+                                                                position: "relative",
+                                                                zIndex: -1 - idx,
+                                                                marginLeft: idx > 0 ? -15 : 0,
+                                                                backgroundImage: `url(${ingridient.image_mobile})`,
+                                                                backgroundPosition: "center",
+                                                            }}
+                                                        />
+                                                    )
                                                 );
                                             })}
                                             {order.ingredients.length > 5 ? (

@@ -1,6 +1,8 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
+    TForgotPasswordForm,
     TInitStateUserInfoReducerType,
+    TLoginForm,
     TLogInResponse,
     TRefreshTokenResponse,
     TRegistrationFormType,
@@ -56,15 +58,11 @@ export const appStart = createAsyncThunk("userInfoReducer/appStart", async (tmp 
     }
 });
 
-export const logIn = createAsyncThunk("userInfoReducer/logIn", async (form) => {
-    try {
-        const response = await loginRequest(form);
-        const data = await response.json();
-        if (data.success) {
-            return data;
-        }
-    } catch (error) {
-        console.log("=error:", error);
+export const logIn = createAsyncThunk("userInfoReducer/logIn", async (form: TLoginForm) => {
+    const response = await loginRequest(form);
+    const data = await response.json();
+    if (data.success) {
+        return data;
     }
 });
 
@@ -82,7 +80,7 @@ export const registnration = createAsyncThunk("userInfoReducer/registnration", a
     }
 });
 
-export const forgotPassword = createAsyncThunk("userInfoReducer/forgotPassword", async (form) => {
+export const forgotPassword = createAsyncThunk("userInfoReducer/forgotPassword", async (form: TForgotPasswordForm) => {
     try {
         const response = await forgotPasswordRequest(form);
         const data = await response.json();
@@ -142,8 +140,8 @@ export const initStateUserInfoReducer: TInitStateUserInfoReducerType = {
     isLoad: false,
     redirectTo: null,
     isAuth: false,
-    name: null,
-    email: null,
+    name: "",
+    email: "",
     accessToken: null,
 };
 
@@ -169,7 +167,7 @@ export const userInfoReducer = createSlice({
         setAccessToken: (state, action: PayloadAction<string>) => {
             state.accessToken = action.payload;
         },
-        setRedirectTo: (state, action: PayloadAction<string>) => {
+        setRedirectTo: (state, action: PayloadAction<string | null>) => {
             state.redirectTo = action.payload;
         },
     },

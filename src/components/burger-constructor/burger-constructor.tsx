@@ -1,19 +1,18 @@
 import { ConstructorElement } from "@ya.praktikum/react-developer-burger-ui-components/dist/ui/constructor-element";
-import React, { useCallback, useRef } from "react";
+import React, { FC, useCallback, useRef } from "react";
 import styles from "./burger-constructor.module.css";
 import { DragIcon } from "@ya.praktikum/react-developer-burger-ui-components/dist/ui/icons/drag-icon";
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components/dist/ui/icons/currency-icon";
 import { Button } from "@ya.praktikum/react-developer-burger-ui-components/dist/ui/button";
 import OrderDetails from "../order-details/order-details";
 import Modal from "../modal/modal";
-import { useSelector } from "react-redux";
+
 import { useDrag, useDrop } from "react-dnd";
 import { useHistory } from "react-router-dom";
 
-import { useDispatch } from "react-redux";
-
 import { burgerIngredientConstructorReducer, selectBIConstructorIsLoad, sendOrder } from "services/reduсers/slices/constructor-Ingredients";
 import { RootStore } from 'services/store';
+import { useAppDispatch, useAppSelector } from "services/hooks";
 
 interface DragableObject {
     index: number | string;
@@ -74,22 +73,14 @@ const ConstructorElementWraper = ({ ingredient, index, opt, handleClose, moveIng
     );
 };
 
-// ConstructorElementWraper.propTypes = {
-//     ingredient: ingrediensPropTypes.isRequired,
-//     index: PropTypes.number.isRequired,
-//     opt: PropTypes.object.isRequired,
-//     handleClose: PropTypes.func.isRequired,
-//     moveIngredient: PropTypes.func.isRequired,
-// };
-
-export default function BurgerConstructor() {
-    const { orderId, orderSum } = useSelector((store:RootStore) => store.burgerIngredientConstructor);
-    const order = useSelector((store:RootStore) => store.burgerIngredientConstructor.order);
+const BurgerConstructor:FC = () => {
+    const { orderId, orderSum } = useAppSelector((store:RootStore) => store.burgerIngredientConstructor);
+    const order = useAppSelector((store:RootStore) => store.burgerIngredientConstructor.order);
     const { actions } = burgerIngredientConstructorReducer;
-    const BIConstructorIsLoad = useSelector(selectBIConstructorIsLoad);
-    const { isAuth, accessToken } = useSelector((store:RootStore) => store.userInfo);
+    const BIConstructorIsLoad = useAppSelector(selectBIConstructorIsLoad);
+    const { isAuth, accessToken } = useAppSelector((store:RootStore) => store.userInfo);
 
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
     const history = useHistory();
 
     const [, dropTarget] = useDrop({
@@ -213,3 +204,5 @@ export default function BurgerConstructor() {
         </>
     );
 }
+
+export default BurgerConstructor

@@ -11,4 +11,5 @@ export const orderState = {
     created: ["Создан", "#fff"],
     canceled: ["Отметен", "#fff"],
 };
-// 'pending' 'done'.  «Готовится» и «Выполнен»
+
+export const mainUrl = "https://norma.nomoreparties.space/api";

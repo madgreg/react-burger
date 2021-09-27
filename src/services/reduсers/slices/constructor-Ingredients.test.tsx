@@ -4,6 +4,7 @@ import fetchMock from "fetch-mock";
 import { burgerIngredientConstructorInitState, burgerIngredientConstructorReducer, selectOrderId, selectOrderSum } from "./constructor-Ingredients";
 import { getOrder } from "./orders-tape";
 import { TBurgerIngredientConstructorInitStateType, TIngrediensTypes } from "types";
+import { mainUrl } from "utils/vars";
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
@@ -54,7 +55,7 @@ describe("ordersTapeReducer", () => {
         };
 
         const store = mockStore({});
-        fetchMock.getOnce("https://norma.nomoreparties.space/api/orders/" + orderN, {
+        fetchMock.getOnce(mainUrl + "/orders/" + orderN, {
             body: expectedState,
             headers: { "content-type": "application/json" },
         });

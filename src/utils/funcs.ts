@@ -8,7 +8,7 @@ export function getCookie(name) {
     return matches ? decodeURIComponent(matches[1]) : undefined;
 }
 
-export function setCookie(name, value, props) {
+export function setCookie(name, value, props?) {
     props = props || {};
     let exp = props.expires;
     if (typeof exp == "number" && exp) {
@@ -37,9 +37,9 @@ export function deleteCookie(name) {
 }
 
 export const getDaysAfter = (dt) => {
-    const start = new Date(dt);
+    const start: any = new Date(dt);
     let start_ = (start + "").split(" ");
-    const end = Date.now();
+    const end = Date.now();    
     const aday__ = Math.trunc((end - start) / 1000 / 86400);
     let aday = "Сегодня";
     if (aday__ === 1) {
@@ -51,7 +51,7 @@ export const getDaysAfter = (dt) => {
     }
 
     const h = start.getHours();
-    let m = start.getMinutes();
+    let m: string | number = start.getMinutes();
     m = m > 9 ? m : "0" + m;
 
     return `${aday}, ${h}:${m} i-${start_[5]} `;

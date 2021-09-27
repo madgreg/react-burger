@@ -1,10 +1,13 @@
-import React, { useEffect } from "react";
+import React, { FC, useEffect } from "react";
 import styles from "./ingredient-details.module.css";
 
-import { useDispatch, useSelector } from "react-redux";
+
 import Modal from "components/modal/modal";
 import { burgerIngredientReducer } from "services/reduсers/slices/burger-ingredient";
 import { useParams, useLocation, useHistory } from "react-router-dom";
+import { RootStore } from "services/store";
+import { TIngredientDetails } from "types";
+import { useAppDispatch, useAppSelector } from "services/hooks";
 
 const getStatisticItem = (title, value) => {
     const statisticCssClass = "mt-2 text text_type_digits-default " + styles.textAlignCenter;
@@ -16,34 +19,24 @@ const getStatisticItem = (title, value) => {
     );
 };
 
-export default function IngredientDetails({isModal=false}) {
+const IngredientDetails:FC<TIngredientDetails|any> = ({isModal = false}) => {
     const params = useParams();
     const location = useLocation();
-    const history = useHistory()
-    const ingredien = useSelector((store) => store.burgerIngredient.currentViewIngredient);
-    
+    const history = useHistory();
+    const ingredien = useAppSelector((store: RootStore) => store.burgerIngredient.currentViewIngredient);
+
     const { actions } = burgerIngredientReducer;
-    const dispatch = useDispatch();
-    
+    const dispatch = useAppDispatch();
 
     useEffect(() => {
         dispatch(actions.setCurrentViewIngredient(params.id));
-    }, [params.id,actions,dispatch]);
+    }, [params.id, actions, dispatch]);
 
     const handleModalClose = () => {
         dispatch(actions.setCurrentViewIngredient(null));
-        // dispatch(actions.setModal(false))
-
         history.replace({
-            pathname: '/',
+            pathname: "/",
         });
-
-        // if(location.state){
-        //     history.replace({
-        //         pathname:  location.state.referrer,
-        //         state:  undefined
-        //     });
-        // }
     };
 
     return (
@@ -65,7 +58,6 @@ export default function IngredientDetails({isModal=false}) {
                 </Modal>
             )}
             {ingredien && !isModal && (
-
                 <div className={styles.box}>
                     <div className="text text_type_main-large mt-30">Детали ингредиента</div>
                     <img src={ingredien.image_large} alt={ingredien.name} />
@@ -82,4 +74,6 @@ export default function IngredientDetails({isModal=false}) {
             )}
         </>
     );
-}
+};
+
+export default IngredientDetails;

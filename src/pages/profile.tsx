@@ -1,24 +1,30 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { appReducer } from "services/reduсers/slices/app";
-import { useDispatch, useSelector } from "react-redux";
+
 import styles from "./profile.module.css";
 import { Button, Input } from "@ya.praktikum/react-developer-burger-ui-components";
 import { useHistory, Link } from "react-router-dom";
 import { logout, updateUserInfo } from "services/reduсers/slices/user-Info";
-import { WS_CONNECTION_CLOSE_AUTH, WS_CONNECTION_START_AUTH } from "services/reduсers/actions";
+import { WS_CONNECTION_CLOSE, WS_CONNECTION_START } from "services/reduсers/actions";
 import { wsUrlProfile } from "utils/vars";
 import { OrdersList } from "components/orders-list/orders-list";
+import { RootStore } from "services/store";
+import { TRegistrationFormType } from "types";
+import { useAppDispatch, useAppSelector } from "services/hooks";
 
 const ProfilePage = () => {
     const history = useHistory();
     const urlArr = history.location.pathname.split("/");
-    const userInfo = useSelector((store) => store.userInfo);
-    const [form, setValue] = useState({ name: userInfo.name, email: userInfo.email, password: "" });
-    const dispatch = useDispatch();
+    const userInfo = useAppSelector((store: RootStore) => store.userInfo);
+    const clearForm: TRegistrationFormType = {  email: userInfo.email, password: "", name: userInfo.name };
+    const [form, setValue] = useState(clearForm);
+    const dispatch = useAppDispatch();
 
     useEffect(() => {
-        dispatch({ type: WS_CONNECTION_START_AUTH, payload: wsUrlProfile + userInfo.accessToken });
-        return () => dispatch({ type: WS_CONNECTION_CLOSE_AUTH });
+        dispatch({ type: WS_CONNECTION_START, payload: wsUrlProfile + userInfo.accessToken });
+        return () => {
+            dispatch({ type: WS_CONNECTION_CLOSE });
+        };
     }, [dispatch, userInfo.accessToken]);
 
     const onChange = (e) => {
@@ -32,7 +38,7 @@ const ProfilePage = () => {
     let saveOnClickHandler = useCallback(
         (e) => {
             e.preventDefault();
-            dispatch(updateUserInfo(form, userInfo.accessToken));
+            dispatch(updateUserInfo({ form: form, accessToken: userInfo.accessToken }));
         },
         [form, userInfo.accessToken, dispatch]
     );
@@ -84,7 +90,11 @@ const ProfilePage = () => {
                     </Button>
                 </form>
             )}
-            {urlArr[2] === "orders" && <div style={{ width: 844 }}><OrdersList pathname='profile/orders'/></div>}
+            {urlArr[2] === "orders" && (
+                <div style={{ width: 844 }}>
+                    <OrdersList pathname="profile/orders" />
+                </div>
+            )}
         </section>
     );
 };

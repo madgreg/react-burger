@@ -17,7 +17,8 @@ import {
 import configureStore from "redux-mock-store";
 import thunk from "redux-thunk";
 import fetchMock from "fetch-mock";
-import { TInitStateUserInfoReducerType, TRegistrationFormType, TResetPaswordForm } from "types";
+import { TInitStateUserInfoReducerType, TLoginForm, TRegistrationFormType, TResetPaswordForm } from "types";
+import { mainUrl } from "utils/vars";
 
 const middlewares = [thunk];
 const mockStore = configureStore(middlewares);
@@ -96,24 +97,11 @@ describe("userInfoReducer", () => {
         };
 
         const store = mockStore(initStateUserInfoReducer);
-        fetchMock.postOnce("https://norma.nomoreparties.space/api/auth/login", {
+        fetchMock.postOnce(mainUrl + "/auth/login", {
             body: expectedState,
         });
-
-        // const expectedActions = [
-        //     {
-        //         type: "userInfoReducer/setUserInfo",
-        //         payload: { email: "miozlhnpbpqioxjvcl@bptfp.net", name: "11" },
-        //     },
-        //     { type: "userInfoReducer/setAuth", payload: true },
-        //     {
-        //         type: "userInfoReducer/setAccessToken",
-        //         payload:
-        //             "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxM2I4MWFjMzYwOGYwMDAxZWI5MmI1NCIsImlhdCI6MTYzMjQ2NzcwNywiZXhwIjoxNjMyNDY4OTA3fQ.qUkf-TOoaz7jZa44Z5jVChFwETlsRmY7z0g2pI5VZ_A",
-        //     },
-        // ];
-
-        await store.dispatch(logIn());
+        const tmpForm: TLoginForm = { email: "wq", password: "sad"};
+        await store.dispatch(logIn(tmpForm));
         // expect(store.getActions()).toEqual(expectedActions);
         expect(store.getActions().length).toEqual(2);
     });
@@ -128,7 +116,7 @@ describe("userInfoReducer", () => {
         };
 
         const store = mockStore(initStateUserInfoReducer);
-        fetchMock.patchOnce("https://norma.nomoreparties.space/api/auth/user", {
+        fetchMock.patchOnce(mainUrl + "/auth/user", {
             body: expectedState,
         });
 
@@ -140,13 +128,13 @@ describe("userInfoReducer", () => {
         // ];
 
         const updateUserInforArg = {
-            form: "string",
+            form: { email: "string", password: "string", name: "string" },
             accessToken: "string",
         };
 
         await store.dispatch(updateUserInfo(updateUserInforArg));
         expect(store.getActions().length).toEqual(2);
-        
+
         // expect(store.getActions()).toEqual(expectedActions);
     });
 
@@ -156,7 +144,7 @@ describe("userInfoReducer", () => {
         };
 
         const store = mockStore(initStateUserInfoReducer);
-        fetchMock.postOnce("https://norma.nomoreparties.space/api/auth/logout", {
+        fetchMock.postOnce(mainUrl + "/auth/logout", {
             body: expectedState,
         });
 
@@ -174,7 +162,7 @@ describe("userInfoReducer", () => {
         };
 
         const store = mockStore(initStateUserInfoReducer);
-        fetchMock.postOnce("https://norma.nomoreparties.space/api/password-reset/reset", {
+        fetchMock.postOnce(mainUrl + "/password-reset/reset", {
             body: expectedState,
         });
 
@@ -194,13 +182,13 @@ describe("userInfoReducer", () => {
         };
 
         const store = mockStore(initStateUserInfoReducer);
-        fetchMock.postOnce("https://norma.nomoreparties.space/api/password-reset", {
+        fetchMock.postOnce(mainUrl + "/password-reset", {
             body: expectedState,
         });
 
         // const expectedActions = [{ type: "userInfoReducer/setRedirectTo", payload: "/reset-password" }];
 
-        await store.dispatch(forgotPassword());
+        await store.dispatch(forgotPassword({email:""}));
 
         expect(store.getActions().length).toEqual(2);
     });
@@ -212,7 +200,7 @@ describe("userInfoReducer", () => {
         };
 
         const store = mockStore(initStateUserInfoReducer);
-        fetchMock.postOnce("https://norma.nomoreparties.space/api/auth/register", {
+        fetchMock.postOnce(mainUrl + "/auth/register", {
             body: expectedState,
         });
 

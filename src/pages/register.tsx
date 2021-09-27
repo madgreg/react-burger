@@ -3,16 +3,18 @@ import React, { useCallback, useEffect, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { registnration } from "services/reduсers/slices/user-Info";
 import styles from "./login.module.css";
-import { useDispatch, useSelector } from 'react-redux';
+
+import { RootStore } from 'services/store';
+import { useAppDispatch, useAppSelector } from "services/hooks";
 
 
 const RegisterPage = () => {
     const [form, setValue] = useState({ name: "", email: "", password: "" });
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
     const onChange = (e) => {
         setValue({ ...form, [e.target.name]: e.target.value });
     };
-    const {accessToken} = useSelector(store=>store.userInfo)
+    const {accessToken} = useAppSelector((store:RootStore)=>store.userInfo)
     const history = useHistory();
 
     useEffect(()=>{        

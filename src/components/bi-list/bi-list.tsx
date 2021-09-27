@@ -1,14 +1,15 @@
-import React, { ReactElement, useEffect, useRef } from "react";
+import React, { FC, ReactElement, useEffect, useRef } from "react";
 
 import { Counter } from "@ya.praktikum/react-developer-burger-ui-components/dist/ui/counter";
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components/dist/ui/icons/currency-icon";
 import styles from "./bi-list.module.css";
-import { useSelector, useDispatch } from "react-redux";
+
 import { bunMenu, mainMenu, sauceMenu } from "utils/vars";
 import { useDrag } from "react-dnd";
 import { burgerIngredientReducer } from "services/reduсers/slices/burger-ingredient";
 import { Link } from "react-router-dom";
 import { RootStore } from "services/store";
+import { useAppDispatch, useAppSelector } from "services/hooks";
 
 const getCaptionElement = (title, cssCls = "") => {
     return (
@@ -82,13 +83,13 @@ const genMenu = (data, order) => {
 
 const initMenuRoot: ReactElement = <div key="root"></div>;
 
-export default function BIList() {
-    const { burgerIngredients } = useSelector((store: RootStore) => store.burgerIngredient);
-    const { order } = useSelector((store: RootStore) => store.burgerIngredientConstructor);
+const BIList: FC = () => {
+    const { burgerIngredients } = useAppSelector((store: RootStore) => store.burgerIngredient);
+    const { order } = useAppSelector((store: RootStore) => store.burgerIngredientConstructor);
     const [menu, setMenu] = React.useState([initMenuRoot]);
     const observerRef = useRef(null);
     const { actions } = burgerIngredientReducer;
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
 
     useEffect(() => {
         let options = {
@@ -122,4 +123,6 @@ export default function BIList() {
             </div>
         </section>
     );
-}
+};
+
+export default BIList;

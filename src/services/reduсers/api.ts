@@ -1,7 +1,8 @@
 import { getCookie } from "utils/funcs";
+import { mainUrl } from "utils/vars";
 
 export const registerRequest = async (form) => {
-    const response =  await fetch("https://norma.nomoreparties.space/api/auth/register", {
+    const response =  await fetch(mainUrl + "/auth/register", {
         method: "POST",
         mode: "cors",
         cache: "no-cache",
@@ -21,7 +22,7 @@ export const registerRequest = async (form) => {
 };
 
 export const refreshTokenRequest = async () => {
-    const response = await fetch("https://norma.nomoreparties.space/api/auth/token", {
+    const response = await fetch(mainUrl + "/auth/token", {
         method: "POST",
         mode: "cors",
         cache: "no-cache",
@@ -42,7 +43,7 @@ export const refreshTokenRequest = async () => {
     return response;
 };
 export const getUserInfoRequest = async (token) => {
-    const response = await fetch("https://norma.nomoreparties.space/api/auth/user", {
+    const response = await fetch(mainUrl + "/auth/user", {
         method: "GET",
         mode: "cors",
         cache: "no-cache",
@@ -62,7 +63,7 @@ export const getUserInfoRequest = async (token) => {
 };
 
 export const loginRequest = async (form) => {
-    const response = await fetch("https://norma.nomoreparties.space/api/auth/login", {
+    const response = await fetch(mainUrl + "/auth/login", {
         method: "POST",
         mode: "cors",
         cache: "no-cache",
@@ -82,7 +83,7 @@ export const loginRequest = async (form) => {
 };
 
 export const forgotPasswordRequest = async (form) => {
-    const response = await fetch("https://norma.nomoreparties.space/api/password-reset", {
+    const response = await fetch(mainUrl + "/password-reset", {
         method: "POST",
         mode: "cors",
         cache: "no-cache",
@@ -101,7 +102,7 @@ export const forgotPasswordRequest = async (form) => {
     return response;
 };
 export const resetPasswordRequest = async (form) => {
-    const response = await fetch("https://norma.nomoreparties.space/api/password-reset/reset", {
+    const response = await fetch(mainUrl + "/password-reset/reset", {
         method: "POST",
         mode: "cors",
         cache: "no-cache",
@@ -121,7 +122,7 @@ export const resetPasswordRequest = async (form) => {
 };
 
 export const logoutRequest = async () => {
-    const response = await fetch("https://norma.nomoreparties.space/api/auth/logout", {
+    const response = await fetch(mainUrl + "/auth/logout", {
         method: "POST",
         mode: "cors",
         cache: "no-cache",
@@ -143,7 +144,7 @@ export const logoutRequest = async () => {
 };
 
 export const updateUserInfoRequest = async (form, token) => {
-    const response = await fetch("https://norma.nomoreparties.space/api/auth/user", {
+    const response = await fetch(mainUrl + "/auth/user", {
         method: "PATCH",
         mode: "cors",
         cache: "no-cache",
@@ -164,7 +165,7 @@ export const updateUserInfoRequest = async (form, token) => {
 };
 
 export const loadBurgerIngredientRequest = async () => {
-    const response = await fetch("https://norma.nomoreparties.space/api/ingredients");
+    const response = await fetch(mainUrl + "/ingredients");
     if (response.status >= 400 && response.status < 600) {
         throw new Error("Bad response from server");
     }
@@ -173,7 +174,7 @@ export const loadBurgerIngredientRequest = async () => {
 };
 
 export const getOrderRequest = async (order) => {
-    const response = await fetch("https://norma.nomoreparties.space/api/orders/" + order, {
+    const response = await fetch(mainUrl + "/orders/" + order, {
         method: "GET",
         headers: {
             "Content-Type": "application/json;charset=utf-8",
@@ -187,7 +188,7 @@ export const getOrderRequest = async (order) => {
 };
 
 export const sendOrderRequest = async (order, accessToken) => {
-    const response = await fetch("https://norma.nomoreparties.space/api/orders", {
+    const response = await fetch(mainUrl + "/orders", {
         method: "POST",
         headers: {
             "Content-Type": "application/json;charset=utf-8",

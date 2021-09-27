@@ -3,11 +3,13 @@ import { Logo } from "@ya.praktikum/react-developer-burger-ui-components/dist/ui
 import HeaderButton from "../header-button/header-button";
 import { Link } from "react-router-dom";
 import styles from "./app-header.module.css";
-import { useSelector } from "react-redux";
-import { RootStore } from "services/store";
 
-export default function AppHeader() {
-    const { activePage } = useSelector((store:RootStore) => store.appInfo);
+import { RootStore } from "services/store";
+import { FC } from "react";
+import { useAppSelector } from "services/hooks";
+
+const AppHeader:FC = () => {
+    const { activePage } = useAppSelector((store:RootStore) => store.appInfo);
     return (
         <div className={styles.app_head}>
             <nav className={styles.head_nav}>
@@ -52,3 +54,5 @@ export default function AppHeader() {
         </div>
     );
 }
+
+export default AppHeader
