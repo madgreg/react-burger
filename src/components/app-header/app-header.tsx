@@ -17,7 +17,7 @@ export default function AppHeader() {
                             iconName="BurgerIcon"
                             iconType={activePage === "home" ? "primary" : "secondary"}
                             inActive={activePage === "home" ? 0 : 1}
-                            first={1}
+                            first={1} 
                         >
                             Конструктор
                         </HeaderButton>

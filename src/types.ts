@@ -1,3 +1,7 @@
+import { TIconProps } from "@ya.praktikum/react-developer-burger-ui-components/dist/ui/icons/utils";
+import { StringifyOptions } from "querystring";
+import { ReactChild } from "react";
+
 export type ingrediensPropTypes = {
     _id: string;
     name: string;
@@ -132,3 +136,26 @@ export type resetPaswordForm = {
     token: string;
 }
 
+type TIconTypes = 'secondary' | 'primary' | 'error' | 'success';
+
+export type THeaderButton = {
+    iconName:string;
+    iconType:TIconTypes;
+    inActive?: number; 
+    first?: number; 
+    children: ReactChild; 
+    onClick?: any;
+} 
+
+export type TModal = {
+    children: ReactChild; 
+    onClose: any; ///разобраться с фенкциями
+    title: string; 
+    titleSize?: string;
+    marginCls?: string;
+};
+
+export type TModalOverlay = {
+    children: ReactChild, 
+    onClick: any
+};

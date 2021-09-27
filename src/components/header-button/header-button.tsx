@@ -1,23 +1,23 @@
 import { BurgerIcon } from "@ya.praktikum/react-developer-burger-ui-components/dist/ui/icons/burger-icon";
 import { ListIcon } from "@ya.praktikum/react-developer-burger-ui-components/dist/ui/icons/list-icon";
 import { ProfileIcon } from "@ya.praktikum/react-developer-burger-ui-components/dist/ui/icons/profile-icon";
-import React from "react";
+import React, { FC } from "react";
 import styles from "./header-button.module.css";
-import PropTypes from "prop-types";
+import { THeaderButton } from "types";
 
-export default function HeaderButton({ iconName, iconType, inActive = 1, first = 0, children, onClick=()=>{} }) {
+const HeaderButton: FC<THeaderButton> = ({ iconName, iconType, inActive = 1, first = 0, children, onClick=()=>{} })=>{
     let icon;
 
     switch (iconName) {
         case "ProfileIcon":
             icon = <ProfileIcon type={iconType} />;
-            break;
+            break; 
         case "BurgerIcon":
             icon = <BurgerIcon type={iconType} />;
             break;
         case "ListIcon":
             icon = <ListIcon type={iconType} />;
-            break;
+            break; 
         default:
             break;
     }
@@ -29,12 +29,9 @@ export default function HeaderButton({ iconName, iconType, inActive = 1, first =
             <span className={"pl-2 text text_type_main-default " + (inActive ? "text_color_inactive" : "")}>{children}</span>
         </button>
     );
-}
 
-HeaderButton.propTypes = {
-    iconName: PropTypes.string.isRequired,
-    iconType: PropTypes.string.isRequired,
-    inActive: PropTypes.number,
-    first: PropTypes.number,
-    children: PropTypes.string.isRequired,
-};
+} 
+
+
+
+export default HeaderButton
