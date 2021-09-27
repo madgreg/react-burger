@@ -12,7 +12,7 @@ import { useAppSelector } from "services/hooks";
 export const OrdersList: FC<TOrdersList | any> = ({ pathname = "feed" }) => {
     const orders = useAppSelector((store: RootStore) => store.ordersTape.orderList);
     const burgerIngredients = useAppSelector(selectBurgerIngredients);
-    // console.log(orders)
+    
     return (
         <div style={{ height: 916, overflowY: "auto" }}>
             <div className="pr-2" style={{ display: "flex", flexDirection: "column", gap: 16 }}>

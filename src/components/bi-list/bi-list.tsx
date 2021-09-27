@@ -64,14 +64,14 @@ const genMenu = (data, order) => {
     data.forEach(function (x) {
         const cnt = predResult[x.type].productList.length + 1;
         const modFg = !(cnt % 2);
-        // console.log( order)
+        
         predResult[x.type].productList.push(
             <IngredienCard key={x._id} ingredien={x} count={getIngredientCount(x._id, order)} cssCls={!modFg ? " ml-6" : ""} />
         );
     });
-    // console.log(predResult)
+    
     return Object.keys(predResult).map((x, index) => {
-        console.log(predResult[x].productList.slice(1));
+        
         return (
             <div key={index} className="pt-10 pl-4" onClick={() => {}}>
                 {predResult[x].productList[0]}
@@ -104,7 +104,7 @@ const BIList: FC = () => {
         const target1 = document.querySelector(`.${sauceMenu}`);
         const target2 = document.querySelector(`.${mainMenu}`);
         if (target && target1 && target2) {
-            // console.log(target);
+            
             observer.observe(target);
             observer.observe(target1);
             observer.observe(target2);

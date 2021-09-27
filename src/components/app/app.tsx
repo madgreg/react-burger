@@ -72,7 +72,6 @@ const App: FC = () => {
                                 path="/profile/orders/:id"
                                 exact={true}
                                 render={(state) => {
-                                    console.log(state);
                                     return (
                                         <>
                                             {state.location.state && state.location.state.modal && state.history.action === "PUSH" && (
@@ -100,7 +99,6 @@ const App: FC = () => {
                                 path="/feed/:id"
                                 exact={true}
                                 render={(state) => {
-                                    console.log(state.history.action);
                                     return (
                                         <>
                                             {state.location.state && state.location.state.modal && state.history.action === "PUSH" && (

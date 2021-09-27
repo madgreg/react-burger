@@ -26,35 +26,27 @@ import { appReducer } from "./app";
 // import { appReducer } from "./app";
 
 export const getUserInfo = createAsyncThunk("userInfoReducer/getUserInfo", async (tmp = undefined, thunkApi) => {
-    try {
-        const store: any = thunkApi.getState();
-        const response = await getUserInfoRequest(store.userInfo.accessToken);
-        const data = await response.json();
-        if (data.success) {
-            thunkApi.dispatch(appReducer.actions.setTmpFg());
-            return data;
-        } else {
-            console.log(data.message);
-        }
-    } catch (error) {
-        console.log("=error:", error);
+    const store: any = thunkApi.getState();
+    const response = await getUserInfoRequest(store.userInfo.accessToken);
+    const data = await response.json();
+    if (data.success) {
+        thunkApi.dispatch(appReducer.actions.setTmpFg());
+        return data;
+    } else {
+        console.log(data.message);
     }
 });
 
 export const appStart = createAsyncThunk("userInfoReducer/appStart", async (tmp = undefined, { dispatch }) => {
-    try {
-        const response = await refreshTokenRequest();
-        const data = await response.json();
-        if (data.success) {
-            setTimeout(() => {
-                dispatch(getUserInfo());
-            }, 200);
-            return data;
-        } else {
-            console.log(data.message);
-        }
-    } catch (error) {
-        console.log("=error:", error);
+    const response = await refreshTokenRequest();
+    const data = await response.json();
+    if (data.success) {
+        setTimeout(() => {
+            dispatch(getUserInfo());
+        }, 200);
+        return data;
+    } else {
+        console.log(data.message);
     }
 });
 
@@ -67,72 +59,52 @@ export const logIn = createAsyncThunk("userInfoReducer/logIn", async (form: TLog
 });
 
 export const registnration = createAsyncThunk("userInfoReducer/registnration", async (form: TRegistrationFormType) => {
-    try {
-        const response = await registerRequest(form);
-        const data = await response.json();
-        if (data.success) {
-            return data;
-        } else {
-            console.log(data.message);
-        }
-    } catch (error) {
-        console.log("=error:", error);
+    const response = await registerRequest(form);
+    const data = await response.json();
+    if (data.success) {
+        return data;
+    } else {
+        console.log(data.message);
     }
 });
 
 export const forgotPassword = createAsyncThunk("userInfoReducer/forgotPassword", async (form: TForgotPasswordForm) => {
-    try {
-        const response = await forgotPasswordRequest(form);
-        const data = await response.json();
-        if (data.success) {
-            return data;
-        } else {
-            console.log(data.message);
-        }
-    } catch (error) {
-        console.log("=error:", error);
+    const response = await forgotPasswordRequest(form);
+    const data = await response.json();
+    if (data.success) {
+        return data;
+    } else {
+        console.log(data.message);
     }
 });
 
 export const resetPassword = createAsyncThunk("userInfoReducer/resetPassword", async (form: TResetPaswordForm) => {
-    try {
-        const response = await resetPasswordRequest(form);
-        const data = await response.json();
-        if (data.success) {
-            return data;
-        } else {
-            console.log(data.message);
-        }
-    } catch (error) {
-        console.log("=error:", error);
+    const response = await resetPasswordRequest(form);
+    const data = await response.json();
+    if (data.success) {
+        return data;
+    } else {
+        console.log(data.message);
     }
 });
 
 export const logout = createAsyncThunk("userInfoReducer/logout", async () => {
-    try {
-        const response = await logoutRequest();
-        const data = await response.json();
-        if (data.success) {
-            return data;
-        } else {
-            console.log(data.message);
-        }
-    } catch (error) {
-        console.log("=error:", error);
+    const response = await logoutRequest();
+    const data = await response.json();
+    if (data.success) {
+        return data;
+    } else {
+        console.log(data.message);
     }
 });
 
 export const updateUserInfo = createAsyncThunk("userInfoReducer/updateUserInfo", async (args: TUpdateUserInforArg) => {
-    try {
-        const response = await updateUserInfoRequest(args.form, args.accessToken);
-        const data = await response.json();
-        if (data.success) {
-            return data;
-        } else {
-            console.log(data.message);
-        }
-    } catch (error) {
-        console.log("=error:", error);
+    const response = await updateUserInfoRequest(args.form, args.accessToken);
+    const data = await response.json();
+    if (data.success) {
+        return data;
+    } else {
+        console.log(data.message);
     }
 });
 

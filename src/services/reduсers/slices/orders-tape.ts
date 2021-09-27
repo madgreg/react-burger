@@ -26,13 +26,15 @@ export const ordersTapeReducer = createSlice({
         },
         onMessage: (state, action: PayloadAction<TGetOrderTapeResponse>) => {
             state.orderList = action.payload.orders;
+            state.total = action.payload.total;
+            state.totalToday = action.payload.totalToday;
         },
     },
     extraReducers: (builder) => {
-        builder.addCase(getOrder.fulfilled, (state, action: PayloadAction<TGetOrderTapeResponse>) => {
+        builder.addCase(getOrder.fulfilled, (state, action: PayloadAction<TGetOrderTapeResponse>) => {            
             state.curentOrder = action.payload.orders[0];
-            state.total = action.payload.total;
-            state.totalToday = action.payload.totalToday;
+            // state.total = action.payload.total;
+            // state.totalToday = action.payload.totalToday;
         });
     },
 });

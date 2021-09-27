@@ -58,7 +58,7 @@ describe("ordersTapeReducer", () => {
         };
         const nextState = ordersTapeReducer.reducer(initStateOrdersTapeReducer, actions.setCurentOrder(testValue));
         const rootState = { ordersTape: nextState };
-        // console.log(rootState)
+        
         expect(selectCurentOrder(rootState)).toEqual(testValue);
     });
 

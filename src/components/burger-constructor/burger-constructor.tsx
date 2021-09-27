@@ -109,7 +109,6 @@ const BurgerConstructor:FC = () => {
         }
     };
     const unSendOrderHandler = () => {
-        console.log(1);
         dispatch(actions.resetOrder());
     };
 
