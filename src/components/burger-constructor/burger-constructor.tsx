@@ -12,10 +12,13 @@ import { useHistory } from "react-router-dom";
 
 import { useDispatch } from "react-redux";
 
-
 import { burgerIngredientConstructorReducer, selectBIConstructorIsLoad, sendOrder } from "services/reduсers/slices/constructor-Ingredients";
+import { RootStore } from 'services/store';
 
-
+interface DragableObject {
+    index: number | string;
+    getBoundingClientRect: () => any;
+}
 
 const ConstructorElementWraper = ({ ingredient, index, opt, handleClose, moveIngredient }) => {
     const ref = useRef(null);
@@ -26,7 +29,7 @@ const ConstructorElementWraper = ({ ingredient, index, opt, handleClose, moveIng
                 handlerId: monitor.getHandlerId(),
             };
         },
-        hover(item, monitor) {
+        hover(item: DragableObject, monitor) {
             if (!ref.current) {
                 return;
             }
@@ -36,9 +39,10 @@ const ConstructorElementWraper = ({ ingredient, index, opt, handleClose, moveIng
             if (dragIndex === hoverIndex) {
                 return;
             }
-            const hoverBoundingRect = ref.current?.getBoundingClientRect();
+            const current: DragableObject = ref.current;
+            const hoverBoundingRect = current.getBoundingClientRect();
             const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
-            const clientOffset = monitor.getClientOffset();
+            const clientOffset = monitor.getClientOffset() ||  {x:0,y:0};
             const hoverClientY = clientOffset.y - hoverBoundingRect.top;
             if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
                 return;
@@ -79,11 +83,11 @@ const ConstructorElementWraper = ({ ingredient, index, opt, handleClose, moveIng
 // };
 
 export default function BurgerConstructor() {
-    const { orderId, orderSum } = useSelector((store) => store.burgerIngredientConstructor);
-    const order = useSelector((store) => store.burgerIngredientConstructor.order);
+    const { orderId, orderSum } = useSelector((store:RootStore) => store.burgerIngredientConstructor);
+    const order = useSelector((store:RootStore) => store.burgerIngredientConstructor.order);
     const { actions } = burgerIngredientConstructorReducer;
     const BIConstructorIsLoad = useSelector(selectBIConstructorIsLoad);
-    const { isAuth, accessToken } = useSelector((store) => store.userInfo);
+    const { isAuth, accessToken } = useSelector((store:RootStore) => store.userInfo);
 
     const dispatch = useDispatch();
     const history = useHistory();
@@ -128,22 +132,24 @@ export default function BurgerConstructor() {
         if (!ingredient) {
             return "";
         }
+        type TPosition =  "bottom" | "top"
+        const pos:TPosition = "top"
         let opt = {
             text: ingredient.name,
             price: ingredient.price,
             thumbnail: ingredient.image,
-            type: "top",
+            type: pos, //index > 0 ? "bottom": "top",
             isLocked: true,
         };
         let typeStr = " (верх)";
         if (index > 0) {
-            opt.type = "bottom";
             typeStr = " (низ)";
         }
 
+        const params = { ...opt, text: opt.text + typeStr }
         return (
             <div key={ingredient._id + "_" + index} className={["pl-8", styles.element].join(" ")}>
-                <ConstructorElement {...{ ...opt, text: opt.text + typeStr }} />
+                <ConstructorElement {...params} />
             </div>
         );
     });
