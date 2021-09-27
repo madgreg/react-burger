@@ -2,7 +2,7 @@ import configureMockStore from "redux-mock-store";
 import thunk from "redux-thunk";
 import fetchMock from "fetch-mock";
 import { getOrder, initStateOrdersTapeReducer, ordersTapeReducer, selectCurentOrder, selectOrderList } from "./orders-tape";
-import { orderType } from "types";
+import { TOrderType } from "types";
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
@@ -20,7 +20,7 @@ describe("ordersTapeReducer", () => {
     });
 
     it("setCurentOrder", () => {
-        const testValue:orderType[] = [{
+        const testValue:TOrderType[] = [{
             _id: "614af0d4dab0f3001bb07562",
             ingredients: ["60d3b41abdacab0026a733c7", "60d3b41abdacab0026a733c7"],
             owner: "6141ea8a3608f0001eb933bb",

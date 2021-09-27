@@ -1,4 +1,4 @@
-import { ingrediensPropTypes } from "types";
+import { TIngrediensTypes } from "types";
 import {
     burgerIngredientReducer,
     initBurgerIngredientState,    
@@ -9,7 +9,7 @@ import {
 
 
 const actions = burgerIngredientReducer.actions;
-const ingred: ingrediensPropTypes = {
+const ingred: TIngrediensTypes = {
     _id: "1",
     name: "",
     type: "",

@@ -3,12 +3,12 @@ import thunk from "redux-thunk";
 import fetchMock from "fetch-mock";
 import { burgerIngredientConstructorInitState, burgerIngredientConstructorReducer, selectOrderId, selectOrderSum } from "./constructor-Ingredients";
 import { getOrder } from "./orders-tape";
-import { burgerIngredientConstructorInitStateType, ingrediensPropTypes } from "types";
+import { TBurgerIngredientConstructorInitStateType, TIngrediensTypes } from "types";
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
 const actions = burgerIngredientConstructorReducer.actions;
-const ingred: ingrediensPropTypes = {
+const ingred: TIngrediensTypes = {
     _id: "",
     name: "",
     type: "",
@@ -97,7 +97,7 @@ describe("ordersTapeReducer", () => {
 
         
 
-        const tmpState: burgerIngredientConstructorInitStateType = {
+        const tmpState: TBurgerIngredientConstructorInitStateType = {
             ...burgerIngredientConstructorInitState,
             order: {
                 bun: [{ ...ingred, price: 1 }, { ...ingred, price: 1 }],
@@ -119,7 +119,7 @@ describe("ordersTapeReducer", () => {
             },
         };
 
-        const ingredients:ingrediensPropTypes[] = [{ ...ingred, type: "soil" }, { ...ingred, type: "soil" }, { ...ingred, type: "bun" }, { ...ingred, type: "bun" }];
+        const ingredients:TIngrediensTypes[] = [{ ...ingred, type: "soil" }, { ...ingred, type: "soil" }, { ...ingred, type: "bun" }, { ...ingred, type: "bun" }];
         let nextState = burgerIngredientConstructorInitState;
         ingredients.forEach((x) => {
             nextState = burgerIngredientConstructorReducer.reducer(nextState, actions.addIngredient(x));

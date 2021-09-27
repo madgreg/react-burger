@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { initappReducerStateType } from "types";
+import { TInitappReducerStateType } from "types";
 
-const initState: initappReducerStateType = {
+const initState: TInitappReducerStateType = {
     tmpFg: 0,
     isLoad: false,
     activePage: "home",

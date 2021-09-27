@@ -1,11 +1,11 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-import { burgerIngredientConstructorInitStateType, ingrediensPropTypes, orderSendResponse, OrderSort, sendOrderArg } from "types";
+import { TBurgerIngredientConstructorInitStateType, TIngrediensTypes, TOrderSendResponse, TOrderSort, TSendOrderArg } from "types";
 import { sendOrderRequest } from "../api";
 
 // constructorIngredients API
 
-export const sendOrder = createAsyncThunk("burgerIngredientConstructor/sendOrder", async (orderArg: sendOrderArg) => {
+export const sendOrder = createAsyncThunk("burgerIngredientConstructor/sendOrder", async (orderArg: TSendOrderArg) => {
     try {
         const response = await sendOrderRequest(orderArg.order, orderArg.accessToken);
         const data = await response.json();
@@ -17,7 +17,7 @@ export const sendOrder = createAsyncThunk("burgerIngredientConstructor/sendOrder
     }
 });
 
-export const burgerIngredientConstructorInitState: burgerIngredientConstructorInitStateType = {
+export const burgerIngredientConstructorInitState: TBurgerIngredientConstructorInitStateType = {
     isLoad: false,
     orderSum: 0,
     orderId: null,
@@ -54,7 +54,7 @@ export const burgerIngredientConstructorReducer = createSlice({
                 })
                 .reduce(reducer);
         },
-        addIngredient: (state, action: PayloadAction<ingrediensPropTypes>) => {
+        addIngredient: (state, action: PayloadAction<TIngrediensTypes>) => {
             if (action.payload.type === "bun") {
                 state.order.bun = [action.payload, action.payload];
             } else {
@@ -64,7 +64,7 @@ export const burgerIngredientConstructorReducer = createSlice({
         delIngredient: (state, action: PayloadAction<number>) => {
             state.order.ingredients.splice(action.payload, 1);
         },
-        chagneIngredientPosition: (state, action: PayloadAction<OrderSort>) => {
+        chagneIngredientPosition: (state, action: PayloadAction<TOrderSort>) => {
             let newI = [...state.order.ingredients];
             newI[action.payload.dragIndex] = state.order.ingredients[action.payload.hoverIndex];
             newI[action.payload.hoverIndex] = state.order.ingredients[action.payload.dragIndex];
@@ -76,7 +76,7 @@ export const burgerIngredientConstructorReducer = createSlice({
             .addCase(sendOrder.pending, (state) => {
                 state.isLoad = true;
             })
-            .addCase(sendOrder.fulfilled, (state, action: PayloadAction<orderSendResponse>) => {
+            .addCase(sendOrder.fulfilled, (state, action: PayloadAction<TOrderSendResponse>) => {
                 state.isLoad = false;                
                 state.orderId = action.payload.order.number;
             });

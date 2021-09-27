@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { ingrediensPropTypes, initBurgerIngredientStateType } from "types";
+import { TIngrediensTypes, TInitBurgerIngredientStateType } from "types";
 import { bunMenu } from "utils/vars";
 import { loadBurgerIngredientRequest } from "../api";
 
@@ -17,7 +17,7 @@ export const loadBurgerIngredient = createAsyncThunk("burgerIngredient/loadBurge
     }
 });
 
-export const initBurgerIngredientState: initBurgerIngredientStateType = {
+export const initBurgerIngredientState: TInitBurgerIngredientStateType = {
     isModal: false,
     currentTab: bunMenu,
     burgerIngredients: [],
@@ -41,7 +41,7 @@ export const burgerIngredientReducer = createSlice({
         },
     },
     extraReducers: (builder) => {
-        builder.addCase(loadBurgerIngredient.fulfilled, (state, action: PayloadAction<ingrediensPropTypes[]>) => {
+        builder.addCase(loadBurgerIngredient.fulfilled, (state, action: PayloadAction<TIngrediensTypes[]>) => {
             state.burgerIngredients = [...action.payload];
             state.isLoad = true;
         });

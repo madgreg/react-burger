@@ -17,7 +17,7 @@ import {
 import configureStore from "redux-mock-store";
 import thunk from "redux-thunk";
 import fetchMock from "fetch-mock";
-import { initStateUserInfoReducerType, registrationFormType, resetPaswordForm } from "types";
+import { TInitStateUserInfoReducerType, TRegistrationFormType, TResetPaswordForm } from "types";
 
 const middlewares = [thunk];
 const mockStore = configureStore(middlewares);
@@ -36,7 +36,7 @@ describe("userInfoReducer", () => {
     });
 
     it("resetState", () => {
-        const testValue1: initStateUserInfoReducerType = {
+        const testValue1: TInitStateUserInfoReducerType = {
             ...initStateUserInfoReducer,
             redirectTo: "43234",
             isAuth: true,
@@ -179,7 +179,7 @@ describe("userInfoReducer", () => {
         });
 
         // const expectedActions = [{ type: "userInfoReducer/setRedirectTo", payload: "/login" }];
-        const form: resetPaswordForm = {
+        const form: TResetPaswordForm = {
             password: "string",
             token: "string",
         };
@@ -217,7 +217,7 @@ describe("userInfoReducer", () => {
         });
 
         // const expectedActions = [ { type: 'userInfoReducer/setAccessToken', payload: undefined }];
-        const form: registrationFormType = {
+        const form: TRegistrationFormType = {
             email: "",
             password: "",
             name: "",

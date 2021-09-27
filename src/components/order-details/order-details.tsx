@@ -1,9 +1,9 @@
-import React from "react";
+import React, { FC } from "react";
 import styles from "./order-details.module.css";
 import doneImg from "../../images/done.png";
-import { PropTypes } from "prop-types";
+import { TOrderDetails } from "types";
 
-export default function OrderDetails({ orderId }) {
+const OrderDetails: FC<TOrderDetails> = ({ orderId }) => {
     return (
         <div className={styles.box}>
             <section className="mt-8 text text_type_digits-large">{orderId}</section>
@@ -17,8 +17,6 @@ export default function OrderDetails({ orderId }) {
             </section>
         </div>
     );
-}
-
-OrderDetails.propTypes = {    
-    orderId: PropTypes.string.isRequired,
 };
+
+export default OrderDetails;

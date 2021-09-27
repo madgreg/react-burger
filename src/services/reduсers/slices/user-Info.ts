@@ -1,13 +1,13 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
-    initStateUserInfoReducerType,
-    logInResponse,
-    refreshTokenResponse,
-    registrationFormType,
-    resetPaswordForm,
-    updateUserInforArg,
-    updateUserInfoResponse,
-    userInfoArg,
+    TInitStateUserInfoReducerType,
+    TLogInResponse,
+    TRefreshTokenResponse,
+    TRegistrationFormType,
+    TResetPaswordForm,
+    TUpdateUserInforArg,
+    TUpdateUserInfoResponse,
+    TUserInfoArg,
 } from "types";
 import { deleteCookie, setCookie } from "utils/funcs";
 import {
@@ -68,7 +68,7 @@ export const logIn = createAsyncThunk("userInfoReducer/logIn", async (form) => {
     }
 });
 
-export const registnration = createAsyncThunk("userInfoReducer/registnration", async (form: registrationFormType) => {
+export const registnration = createAsyncThunk("userInfoReducer/registnration", async (form: TRegistrationFormType) => {
     try {
         const response = await registerRequest(form);
         const data = await response.json();
@@ -96,7 +96,7 @@ export const forgotPassword = createAsyncThunk("userInfoReducer/forgotPassword",
     }
 });
 
-export const resetPassword = createAsyncThunk("userInfoReducer/resetPassword", async (form: resetPaswordForm) => {
+export const resetPassword = createAsyncThunk("userInfoReducer/resetPassword", async (form: TResetPaswordForm) => {
     try {
         const response = await resetPasswordRequest(form);
         const data = await response.json();
@@ -124,7 +124,7 @@ export const logout = createAsyncThunk("userInfoReducer/logout", async () => {
     }
 });
 
-export const updateUserInfo = createAsyncThunk("userInfoReducer/updateUserInfo", async (args: updateUserInforArg) => {
+export const updateUserInfo = createAsyncThunk("userInfoReducer/updateUserInfo", async (args: TUpdateUserInforArg) => {
     try {
         const response = await updateUserInfoRequest(args.form, args.accessToken);
         const data = await response.json();
@@ -138,7 +138,7 @@ export const updateUserInfo = createAsyncThunk("userInfoReducer/updateUserInfo",
     }
 });
 
-export const initStateUserInfoReducer: initStateUserInfoReducerType = {
+export const initStateUserInfoReducer: TInitStateUserInfoReducerType = {
     isLoad: false,
     redirectTo: null,
     isAuth: false,
@@ -159,7 +159,7 @@ export const userInfoReducer = createSlice({
             state.email = initStateUserInfoReducer.email;
             state.accessToken = initStateUserInfoReducer.accessToken;
         },
-        setUserInfo: (state, action: PayloadAction<userInfoArg>) => {
+        setUserInfo: (state, action: PayloadAction<TUserInfoArg>) => {
             state.name = action.payload.name;
             state.email = action.payload.email;
         },
@@ -175,14 +175,14 @@ export const userInfoReducer = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            .addCase(logIn.fulfilled, (state, action: PayloadAction<logInResponse>) => {
+            .addCase(logIn.fulfilled, (state, action: PayloadAction<TLogInResponse>) => {
                 state.name = action.payload.user.name;
                 state.email = action.payload.user.email;
                 state.isAuth = true;
                 state.accessToken = action.payload.accessToken.split(" ")[1];
                 setCookie("refreshToken", action.payload.refreshToken);
             })
-            .addCase(registnration.fulfilled, (state, action: PayloadAction<logInResponse>) => {
+            .addCase(registnration.fulfilled, (state, action: PayloadAction<TLogInResponse>) => {
                 setCookie("refreshToken", action.payload.refreshToken);
                 state.accessToken = action.payload.accessToken.split(" ")[1];
             })
@@ -202,15 +202,15 @@ export const userInfoReducer = createSlice({
                 state.isAuth = false;
                 deleteCookie("refreshToken");
             })
-            .addCase(updateUserInfo.fulfilled, (state, action: PayloadAction<updateUserInfoResponse>) => {
+            .addCase(updateUserInfo.fulfilled, (state, action: PayloadAction<TUpdateUserInfoResponse>) => {
                 state.name = action.payload.user.name;
                 state.email = action.payload.user.email;
             })
-            .addCase(appStart.fulfilled, (state, action: PayloadAction<refreshTokenResponse>) => {
+            .addCase(appStart.fulfilled, (state, action: PayloadAction<TRefreshTokenResponse>) => {
                 setCookie("refreshToken", action.payload.refreshToken);
                 state.accessToken = action.payload.accessToken.split(" ")[1];
             })
-            .addCase(getUserInfo.fulfilled, (state, action: PayloadAction<updateUserInfoResponse>) => {
+            .addCase(getUserInfo.fulfilled, (state, action: PayloadAction<TUpdateUserInfoResponse>) => {
                 state.name = action.payload.user.name;
                 state.email = action.payload.user.email;
                 state.isAuth = true;

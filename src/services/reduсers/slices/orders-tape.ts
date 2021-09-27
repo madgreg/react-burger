@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { getOrderOrdersTapeResponse, initStateOrdersTapeReducerType, orderType } from "types";
+import { TGetOrderTapeResponse, TInitStateOrdersTapeReducerType, TOrderType } from "types";
 import { getOrderRequest } from "../api";
 
 export const getOrder = createAsyncThunk("ordersTapeReducer/getOrder", async (order:number) => {
@@ -14,7 +14,7 @@ export const getOrder = createAsyncThunk("ordersTapeReducer/getOrder", async (or
     }
 });
 
-export const initStateOrdersTapeReducer: initStateOrdersTapeReducerType = {
+export const initStateOrdersTapeReducer: TInitStateOrdersTapeReducerType = {
     curentOrder: null,
     orderList: [],
 };
@@ -23,16 +23,16 @@ export const ordersTapeReducer = createSlice({
     name: "ordersTapeReducer",
     initialState: initStateOrdersTapeReducer,
     reducers: {
-        setCurentOrder: (state, action: PayloadAction<orderType>) => {
+        setCurentOrder: (state, action: PayloadAction<TOrderType>) => {
             state.curentOrder = { ...action.payload };
         },
-        onMessage: (state, action: PayloadAction<orderType[]>) => {
+        onMessage: (state, action: PayloadAction<TOrderType[]>) => {
             state.orderList =  action.payload;
         },
     },
     extraReducers: (builder) => {
         builder            
-            .addCase(getOrder.fulfilled, (state, action: PayloadAction<getOrderOrdersTapeResponse>) => {
+            .addCase(getOrder.fulfilled, (state, action: PayloadAction<TGetOrderTapeResponse>) => {
                 state.curentOrder = { ...action.payload.orders[0] };
             });
     },

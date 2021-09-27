@@ -1,8 +1,8 @@
-import { TIconProps } from "@ya.praktikum/react-developer-burger-ui-components/dist/ui/icons/utils";
-import { StringifyOptions } from "querystring";
+// import { TIconProps } from "@ya.praktikum/react-developer-burger-ui-components/dist/ui/icons/utils";
+
 import { ReactChild } from "react";
 
-export type ingrediensPropTypes = {
+export type TIngrediensTypes = {
     _id: string;
     name: string;
     type: string;
@@ -17,39 +17,39 @@ export type ingrediensPropTypes = {
     __v: number;
 };
 
-export type constructorIngredientsOrder = {
-    bun: ingrediensPropTypes[];
-    ingredients: ingrediensPropTypes[];
+export type TConstructorIngredientsOrder = {
+    bun: TIngrediensTypes[];
+    ingredients: TIngrediensTypes[];
 };
-export type burgerIngredientConstructorInitStateType = {
+export type TBurgerIngredientConstructorInitStateType = {
     isLoad: boolean;
     orderSum: number;
     orderId: number | null;
-    order: constructorIngredientsOrder;
+    order: TConstructorIngredientsOrder;
 };
 
-export type OrderSort = {
+export type TOrderSort = {
     dragIndex: number;
     hoverIndex: number;
 };
-export type initBurgerIngredientStateType = {
+export type TInitBurgerIngredientStateType = {
     isModal: boolean;
     currentTab: string;
-    burgerIngredients: ingrediensPropTypes[];
-    currentViewIngredient: ingrediensPropTypes | null;
+    burgerIngredients: TIngrediensTypes[];
+    currentViewIngredient: TIngrediensTypes | null;
     isLoad: boolean;
 };
 
-export type sendOrderArg = {
-    order: constructorIngredientsOrder;
+export type TSendOrderArg = {
+    order: TConstructorIngredientsOrder;
     accessToken: string | null;
 };
 
-export type orderSendResponse = {
+export type TOrderSendResponse = {
     success: boolean;
     name: string;
     order: {
-        ingredients: ingrediensPropTypes[];
+        ingredients: TIngrediensTypes[];
         _id: string;
         owner: {
             name: string;
@@ -66,14 +66,14 @@ export type orderSendResponse = {
     };
 };
 
-export type initStateOrdersTapeReducerType = {
-    curentOrder: orderType | null;
-    orderList: orderType[];
+export type TInitStateOrdersTapeReducerType = {
+    curentOrder: TOrderType | null;
+    orderList: TOrderType[];
 };
 
-export type userOrdersReducerInitStateType = Omit<initStateOrdersTapeReducerType, 'orderList'>
+export type TUserOrdersReducerInitStateType = Omit<TInitStateOrdersTapeReducerType, 'orderList'>
 
-export type orderType = {
+export type TOrderType = {
     _id: string;
     ingredients: string[];
     owner: string;
@@ -85,18 +85,18 @@ export type orderType = {
     __v: number;
 };
 
-export type getOrderOrdersTapeResponse = {
+export type TGetOrderTapeResponse = {
     success: boolean;
-    orders: orderType[];
+    orders: TOrderType[];
 };
 
-export type initappReducerStateType = {
+export type TInitappReducerStateType = {
     tmpFg: number;
     isLoad: boolean;
     activePage: string;
 };
 
-export type initStateUserInfoReducerType = {
+export type TInitStateUserInfoReducerType = {
     isLoad: boolean;
     redirectTo: string | null;
     isAuth: boolean;
@@ -105,33 +105,33 @@ export type initStateUserInfoReducerType = {
     accessToken: string | null;
 };
 
-export type userInfoArg = {
+export type TUserInfoArg = {
     name: string;
     email: string;
 };
 
-export type logInResponse = {
+export type TLogInResponse = {
     success: boolean;
     accessToken: string;
     refreshToken: string;    
-    user: userInfoArg;
+    user: TUserInfoArg;
 };
 
-export type updateUserInfoResponse = Omit<logInResponse, "accessToken" | "refreshToken">;
-export type refreshTokenResponse = Omit<logInResponse, "user">;
+export type TUpdateUserInfoResponse = Omit<TLogInResponse, "accessToken" | "refreshToken">;
+export type TRefreshTokenResponse = Omit<TLogInResponse, "user">;
 
-export type updateUserInforArg = {
+export type TUpdateUserInforArg = {
     form: string;
     accessToken: string;
 };
 
-export type registrationFormType = {
+export type TRegistrationFormType = {
     email: string; 
     password: string; 
     name: string; 
 } 
 
-export type resetPaswordForm = {
+export type TResetPaswordForm = {
     password: string;
     token: string;
 }
@@ -144,7 +144,7 @@ export type THeaderButton = {
     inActive?: number; 
     first?: number; 
     children: ReactChild; 
-    onClick?: any;
+    onClick?: (e:React.MouseEvent)=>void;
 } 
 
 export type TModal = {
@@ -158,4 +158,8 @@ export type TModal = {
 export type TModalOverlay = {
     children: ReactChild, 
     onClick: any
+};
+
+export type TOrderDetails = {    
+    orderId: string;
 };
