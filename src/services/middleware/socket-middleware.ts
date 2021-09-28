@@ -1,12 +1,12 @@
 import { Middleware } from "redux";
-import { ORDERS_TAPE_REDUSER_ON_MESSAGE, WsActionsFull, WS_CONNECTION_CLOSE, WS_CONNECTION_START } from "services/reduсers/actions";
+import { ORDERS_TAPE_REDUSER_ON_MESSAGE, WS_CONNECTION_CLOSE, WS_CONNECTION_START } from "services/reduсers/actions";
 import { RootStore } from "services/store";
 
 export const creatrSocketMiddleware = (): Middleware<{}, RootStore> => {
     const socketMiddleware: Middleware<{}, RootStore> = (store) => {
         let socket: WebSocket | null = null;
 
-        return (next) => (action:WsActionsFull) => {            
+        return (next) => (action) => {            
             const { dispatch } = store;
             const { type } = action;
             if (type === WS_CONNECTION_START && !socket) {

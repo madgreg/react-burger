@@ -58,7 +58,7 @@ const LoginPage = () => {
                         <PasswordInput onChange={onChange} value={form.password} name={"password"} size={"default"} />
                     </div>
                     <div className="mb-20">
-                        <Button type="primary" size="medium" onClick={login}>
+                        <Button type="primary" size="medium">
                             Войти
                         </Button>
                     </div>

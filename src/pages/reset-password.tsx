@@ -64,7 +64,7 @@ const ResetPasswordPage = () => {
                             </div>
 
                             <div className="mb-20">
-                                <Button type="primary" size="medium" onClick={onClickHandler}>
+                                <Button type="primary" size="medium">
                                     Сохранить
                                 </Button>
                             </div>

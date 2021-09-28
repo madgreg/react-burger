@@ -47,7 +47,7 @@ const RegisterPage = () => {
                     </div>
                     <div className="mb-20">
                         <Link to="/login">
-                            <Button type="primary" size="medium" onClick={register}>
+                            <Button type="primary" size="medium">
                                 Зарегистрировать
                             </Button>
                         </Link>

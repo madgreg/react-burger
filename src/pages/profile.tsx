@@ -82,7 +82,7 @@ const ProfilePage = () => {
                         name={"password"}
                         size={"default"}
                     />
-                    <Button type="primary" size="large" onClick={saveOnClickHandler}>
+                    <Button type="primary" size="large">
                         Сохранить
                     </Button>
                     <Button type="primary" size="large" onClick={cancelOnClickHandler}>
