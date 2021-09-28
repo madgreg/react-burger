@@ -14,10 +14,10 @@ import { burgerIngredientConstructorReducer, selectBIConstructorIsLoad, sendOrde
 import { RootStore } from 'services/store';
 import { useAppDispatch, useAppSelector } from "services/hooks";
 
-interface DragableObject {
-    index: number | string;
-    getBoundingClientRect: () => any;
-}
+// interface DragableObject {
+//     index: number | string;
+//     getBoundingClientRect: () => any;
+// }
 
 const ConstructorElementWraper = ({ ingredient, index, opt, handleClose, moveIngredient }) => {
     const ref = useRef(null);
@@ -28,7 +28,7 @@ const ConstructorElementWraper = ({ ingredient, index, opt, handleClose, moveIng
                 handlerId: monitor.getHandlerId(),
             };
         },
-        hover(item: DragableObject, monitor) {
+        hover(item: any, monitor) {
             if (!ref.current) {
                 return;
             }
@@ -38,7 +38,7 @@ const ConstructorElementWraper = ({ ingredient, index, opt, handleClose, moveIng
             if (dragIndex === hoverIndex) {
                 return;
             }
-            const current: DragableObject = ref.current;
+            const current: any = ref.current;
             const hoverBoundingRect = current.getBoundingClientRect();
             const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
             const clientOffset = monitor.getClientOffset() ||  {x:0,y:0};
